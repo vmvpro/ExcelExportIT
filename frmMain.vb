@@ -32,8 +32,6 @@ Public Class frmMain
             Else
                 Me.Visible = False
 
-
-
                 MySub(ceh2, cbo_MonthOSV.Text)
 
                 Me.Visible = True
@@ -46,8 +44,6 @@ Public Class frmMain
         Catch ex As Exception
             Label2.Text = "По " & ceh2 & " ничего не найдено!!!"
             Debug.WriteLine(ex.Message & Environment.NewLine + "По " & ceh2 & " ничего не найдено!!!")
-
-            'If app.ScreenUpdating = False Then app.ScreenUpdating = True
 
             wbook.Close(False)
             app.WindowState = Excel.XlWindowState.xlMinimized
@@ -86,38 +82,13 @@ Public Class frmMain
 
     Sub MySub(ceh As String, cboMonthOSV As String)
 
-        Dim ofd As New OpenFileDialog()
-        ofd.Title = "Выберите файл Excel c оборотно-сальдовой ведомостью для сохранения в PDF"
-
-        If (Environment.UserName = "Vetal") Then '  Or (Environment.UserName = "mww54001") 
-            ofd.InitialDirectory = "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\"
-        Else
-            'ofd.InitialDirectory = "\\erp\TEMP\Оборотно-сальдовая ведомость (ОСВ)\Excel\"
-            ' ofd.InitialDirectory = WorkExcel.PathDirectoryOSV & "\Excel\"
-            ofd.InitialDirectory = WorkExcel.PathDirectoryOSV & "\"
-        End If
-
-        ofd.Filter = "Файлы формата Excel ( *.xlsx; *.xls; *.xlsm;) | *.xlsm; *.xlsx; *.xls; "
-
         Dim path As String = ""
 
         If (Environment.UserName = "mww54001_") Then
             path = Environment.CurrentDirectory & "\Files\" & cboMonthOSV & ".xlsx"
-            'MessageBox.Show(path)
         Else
-
-            'path = WorkExcel.PathDirectoryOSV & "\Files\" & cboMonthOSV & ".xlsx"
-            'path = Environment.CurrentDirectory & "\Files\" & cboMonthOSV & ".xlsx"
-            'path = "\\erpdb\PERSONAL\OSV\Files\" & cboMonthOSV & ".xlsx"
-
-            'path = Environment.CurrentDirectory & "\Files\" & cboMonthOSV & ".xlsx"
-
             path = "\\erpdb\TEMP\OSV" & "\Files\" & cboMonthOSV & ".xlsx"
-
         End If
-
-        'path = Environment.CurrentDirectory & "\Вся оборотка (Ver. 3.1).xlsx"
-        '\\erp\TEMP\App\Программа Export
 
         Try
             app = GetObject(, "Excel.Application")
@@ -131,15 +102,9 @@ Public Class frmMain
 
         wbook = app.Workbooks.Add(path)
 
-
         sheet = wbook.ActiveSheet
 
-
-        Dim rngBB As Excel.Range
-        rngBB = sheet.Columns("D:D")
         '=============================
-
-        Dim rngAA As Excel.Range
 
         app.ScreenUpdating = False
         '
@@ -201,11 +166,7 @@ Public Class frmMain
         'rngEnd = sheet.Range("B" & rCount + 6 + 3)
         'rngEnd.Value = ""
 
-        rngAA = sheet.Columns("A:A")
-        'rngAA.ColumnWidth = 4.6
-
-        Dim rng As Excel.Range
-        Dim rng2 As Excel.Range
+        Dim rngAA As Excel.Range = sheet.Columns("A:A")
 
         sheet.Range("A1").Value = "Оборотно-сальдова відомість"
         sheet.Range("A2").Value = "За рахунками: 20, 22, 281"
