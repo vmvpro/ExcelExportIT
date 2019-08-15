@@ -30,12 +30,8 @@ Public Class WorkExcel
 
     Public Shared ReadOnly Property PathDirectoryOSV As String
         Get
-            'Return "\\erpdb\Updates\_App540\OSV"
-            'Return "\\fs\TMP$\540\OSV"
             Return "\\erpdb\TEMP\OSV"
-            'Return "D:"
         End Get
-
     End Property
 
     ''' <summary>
@@ -83,11 +79,6 @@ Public Class WorkExcel
         app.Visible = visible_
     End Sub
 
-    
-
-    'sheet.Columns("A:A").ColumnWidth() = 6
-
-
     ''' <summary>
     ''' 
     ''' Настройка листа.
@@ -110,8 +101,6 @@ Public Class WorkExcel
         sheet.Range("A3").Value = ""
         sheet.Range("A4").Value = ""
         sheet.Range("A5").Value = ""
-
-        '"Відповідальний:                                               __________          "
 
         sheet.Columns("A:A").ColumnWidth() = 6
         sheet.Columns("B:B").ColumnWidth() = 6
@@ -141,7 +130,7 @@ Public Class WorkExcel
     End Sub
 
     ''' <summary>
-    ''' Столбец в котором размещен старый шифр и который требуется изменить (по умолчанию = столбец "C5")
+    ''' Столбец в котором размещен старый шифр и который требуется изменить (по умолчанию = столбец "D6")
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub RenameRange(Optional ByVal columnRenameString As String = "D")
@@ -149,7 +138,6 @@ Public Class WorkExcel
         Me.columnRename = sheet.Range(columnRenameString & cellFirst.Row)
 
         app.ScreenUpdating = False
-
 
         rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
 
@@ -193,7 +181,6 @@ Public Class WorkExcel
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub sortTable()
-        'If (Not column = 3) Then column = columnRename.Column
 
         Dim column = Me.columnRename.Column
 
