@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>\\erpdb\TEMP\OSV\|\\erpdb\Updates\_App540\OSV\app\|d:\Vetal\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\app\|\\erpdb\Updates\_App540\OSV\|\\erp\TEMP\App\Программа Export\</PublishUrlHistory>
+    <InstallUrlHistory>\\erpdb\Updates\_App540\OSV\app\</InstallUrlHistory>
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>ru-RU</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
+</Project>
