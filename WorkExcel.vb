@@ -247,11 +247,9 @@ Public Class WorkExcel
 
         cellFirst.Value = "№ п/п"
 
-        Dim rngCount As Excel.Range
-        rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
+        Dim rngCount As Excel.Range = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
 
-        Dim rCount As Integer
-        rCount = rngCount.Count
+        Dim rCount As Integer = rngCount.Count
 
         Dim currentCell As Excel.Range
 
