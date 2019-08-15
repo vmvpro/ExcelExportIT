@@ -115,8 +115,6 @@ Public Class frmMain
             'app.ScreenUpdating = True
         End Try
 
-
-        'sheet.Range("table1").
         Dim rngFilter As Object = sheet.Range("table1").AutoFilter(Field:=5, Criteria1:=ceh)
 
         Dim rngRow As Excel.Range = sheet.Range("table1").Find(ceh)
@@ -124,47 +122,19 @@ Public Class frmMain
 
         rngFirst.Select()
 
-        'rngFirst.Select()
-
         Dim rngB As Excel.Range = rngFirst.Offset(0, 1)
         rngB.Select()
-
-
-        'For Each rngRow As Excel.Range In rngFilter
-        'rngRow
-        'Next
-
 
         app.ScreenUpdating = True
 
         sheet.Range("A6").Select()
         sheet.Range("A7").Activate()
 
-        'Dim rngTable As Excel.Range
-
-
-
-        For k = 1 To 4
+        For k = 1 To 5
             app.Range("A" & k).Value = ""
         Next
 
-        'sheet.Range("table1").AutoFilter(4, "Склад 1")
-
-        Dim rngCount As Excel.Range
-        'Dim rngFirst As Excel.Range = sheet.Range("B6")
-
-        'rngFirst.Offset(1, 0).Select()
-
-        'sheet.Range("B6").Select()
-
-        'rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
-
-        'Dim rCount As Integer
-        'rCount = rngCount.Count
-
-        'Dim rngEnd As Excel.Range
-        'rngEnd = sheet.Range("B" & rCount + 6 + 3)
-        'rngEnd.Value = ""
+        
 
         Dim rngAA As Excel.Range = sheet.Columns("A:A")
 
@@ -173,64 +143,16 @@ Public Class frmMain
         sheet.Range("A3").Value = cbo_MonthOSV.Text
         sheet.Range("A4").Value = ceh
 
-        'Dim rngCeh As Excel.Range = sheet.Range("A4")
-        'rngCeh.Value = ceh
-
-        'rng = sheet.Range("A6")
-        'rng.Value = "№"
-
-        'rngFirst.Value = 1
-        'For i = 0 To rCount
-        '    rng2 = rngFirst.Offset(i + 1, 0)
-        '    rng2.Value += i + 2
-        'Next
-
         sheet.Columns("E:E").Hidden = True
-        'Selection.EntireColumn.Hidden = True
-
-        'Dim rngBB As Excel.Range
-
-        'rngBB = sheet.Columns("B:B")
-
-        'rngBB.HorizontalAlignment = Excel.Constants.xlCenter
-        'rngBB.VerticalAlignment = Excel.Constants.xlCenter
-
+        
         '============================================================
 
-        'With sheet.PageSetup
-
-        '.LeftMargin = 0.196850393700787
-        '.RightMargin = 0.196850393700787
-        '.TopMargin = 0.196850393700787
-        '.BottomMargin = 0.196850393700787
-
-        '.LeftMargin = 0.196850393700787
-        '.RightMargin = 0.196850393700787
-        '.TopMargin = 0.393700787401575
-        '.BottomMargin = 0.393700787401575
-
-        '.CenterHorizontally = True
-        '.CenterVertically = True
-
-        '.HeaderMargin = 0
-        '.FooterMargin = 0
-
-        '.PaperSize = Excel.XlPaperSize.xlPaperA3
-
-        '.Zoom = 100
-
-        '.Orientation = Excel.XlPageOrientation.xlLandscape
-
-        'End With
-        sheet.Range("A6").Select()
-
-        Dim fileName As String '= InputBox("Введите номер склада (Пример: 1306)")
-        fileName = ceh
+        Dim fileName As String = ceh
 
         app.ScreenUpdating = True
 
-        'sheet.Range("A7").Activate()
         '==========================================================
+
         If (Environment.UserName = "Vetal") Then
 
             Try
@@ -283,11 +205,6 @@ Public Class frmMain
 
         If (app.Workbooks.Count = 0) Then app.Quit()
 
-        'MsgBox("Файлы успешно сформированы!!!", , ceh2)
-
-        'Me.Close()
-
-
     End Sub
 
 
@@ -308,32 +225,16 @@ Public Class frmMain
 
         'Dim path_ = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "\Files\Months.dat"))
         'Dim path_ = Path.Combine(Environment.CurrentDirectory, "Files\Months.dat")
-        Dim path_ = Path.Combine("\\erpdb\TEMP\OSV", "Files\Months.dat")
+        Dim path_ = Path.Combine(WorkExcel.PathDirectoryOSV, "Files\Months.dat")
 
         Dim files As New StreamReader(path_)
         Dim filesArray = File.ReadLines(path_).ToArray
 
-        'TextBox1.Text = txtHelp.ReadToEnd
-
         cbo_MonthOSV.Items.Add("")
-
-        'While Not files.EndOfStream
-        '    cbo_MonthOSV.Items.Add(files.ReadLine())
-        'End While
 
         For i As Int32 = 0 To filesArray.Length - 1
             cbo_MonthOSV.Items.Add(filesArray(i))
         Next
-
-
-        'cbo_MonthOSV.Items.Add("2017_Октябрь")
-        'cbo_MonthOSV.Items.Add("2017_Ноябрь")
-        'cbo_MonthOSV.Items.Add("2018_Октябрь")
-        'cbo_MonthOSV.Items.Add("ОСВ (Распоряжение)")
-        'cbo_MonthOSV.Items.Add("2019_Январь")
-        'cbo_MonthOSV.Items.Add("2019_Февраль")
-        'cbo_MonthOSV.Items.Add("2019_Март")
-        'cbo_MonthOSV.Items.Add("2019_Июнь")
 
         cbo_MonthOSV.SelectedIndex = 0
 
