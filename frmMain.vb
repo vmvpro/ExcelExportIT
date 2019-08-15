@@ -61,13 +61,11 @@ Public Class frmMain
 
         Me.Visible = False
         For Each row As DataRow In dt.Rows
-
             Try
                 MySub(row("it").ToString(), cbo_MonthOSV.Text)
             Catch ex As Exception
                 sb.Append(row("it").ToString() & Environment.NewLine & ex.Message + Environment.NewLine)
             End Try
-
         Next
 
         Me.Visible = True
@@ -84,11 +82,10 @@ Public Class frmMain
 
         Dim path As String = ""
 
-        If (Environment.UserName = "mww54001_") Then
-            path = Environment.CurrentDirectory & "\Files\" & cboMonthOSV & ".xlsx"
-        Else
-            path = "\\erpdb\TEMP\OSV" & "\Files\" & cboMonthOSV & ".xlsx"
-        End If
+        Dim excel_ As New WorkExcel("2019_Июль_Origin.xlsx")
+
+        path = WorkExcel.PathDirectoryOSV & "\Files\" & cboMonthOSV & ".xlsx"
+
 
         Try
             app = GetObject(, "Excel.Application")
@@ -134,7 +131,6 @@ Public Class frmMain
             app.Range("A" & k).Value = ""
         Next
 
-        
 
         Dim rngAA As Excel.Range = sheet.Columns("A:A")
 
@@ -273,10 +269,7 @@ Public Class frmMain
         ' Файл находится в папке там где запускается исходник (не в папке bin\)
         Dim excel_ As New WorkExcel("2019_Июль_Origin.xlsx", "A6")
 
-
         excel_.Visible(True)
-
-
 
         ' Переименовать столбец (Переименование столбца со старым кодом )
         excel_.RenameRange("D")

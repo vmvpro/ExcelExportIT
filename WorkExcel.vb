@@ -52,8 +52,7 @@ Public Class WorkExcel
     ''' <param name="fileName">Путь файла там, где запускается программа</param>
     ''' <param name="cellFirst">Начальная ячейка, где находиться таблица</param>
     ''' <remarks></remarks>
-    Public Sub New(fileName As String,
-                   Optional ByVal cellFirst As String = "A6")
+    Public Sub New(fileName As String, cellFirst As String)
 
         path_ = Environment.CurrentDirectory
         'Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
