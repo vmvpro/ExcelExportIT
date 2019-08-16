@@ -92,9 +92,6 @@ Public Class frmMain
 
         app = excel_.App
 
-
-        If app.ScreenUpdating = False Then app.ScreenUpdating = True
-
         app.Visible = True
 
         wbook = excel_.WorkBook ' app.Workbooks.Add(path_)
@@ -151,23 +148,7 @@ Public Class frmMain
 
         If (Environment.UserName = "Vetal") Then
 
-            Try
-                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
-                If fi.Exists Then
-                    fi.Delete()
-                End If
-                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlWorkbookDefault)
-            Catch ex As Exception
-
-                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
-                If fi.Exists Then
-                    fi.Delete()
-                End If
-
-                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlExcel8)
-            End Try
-
-            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & monthOSV & ".pdf")
+            
         Else
             Dim di1 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\Excel")
             'Dim di1 As New DirectoryInfo("D:" & "\" & Environment.UserName & "\Excel")
@@ -202,9 +183,6 @@ Public Class frmMain
         If (app.Workbooks.Count = 0) Then app.Quit()
 
     End Sub
-
-
-
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -326,5 +304,25 @@ Public Class frmMain
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryNetwork & "\Files")
+    End Sub
+
+    Private Sub Vetal(fileName As String, monthOSV As String)
+        Try
+            Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
+            If fi.Exists Then
+                fi.Delete()
+            End If
+            wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlWorkbookDefault)
+        Catch ex As Exception
+
+            Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
+            If fi.Exists Then
+                fi.Delete()
+            End If
+
+            wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlExcel8)
+        End Try
+
+        wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & monthOSV & ".pdf")
     End Sub
 End Class
