@@ -7,6 +7,29 @@ Module myFunction
     Public sheet As Excel.Worksheet
     Public sheet2 As Excel.Worksheet
 
+    Public Function LoadComboBox() As DataTable
+
+        Dim dt = New DataTable()
+
+        Dim dc1 As DataColumn = New DataColumn("it")
+        Dim dc2 As DataColumn = New DataColumn("ceh")
+
+        dt.Columns.AddRange({dc1, dc2})
+
+        'If (fileName = "ОСВ (Распоряжение)") Then
+        '    LoadTable.NewLoadTable(dt)
+        'Else
+
+        'End If
+
+        LoadTable.LoadTable(dt)
+
+        Return dt
+        
+
+
+    End Function
+
     Public Function WorkBook(app As Object, path As String) As Excel.Workbook
 
         'Dim app As Excel.Application

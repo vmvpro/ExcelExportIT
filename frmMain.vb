@@ -80,18 +80,9 @@ Public Class frmMain
 
     Sub MySub(ceh As String, cboMonthOSV As String)
 
-        Dim path As String = ""
+        Dim path As String = WorkExcel.PathDirectoryOSV & "\Files\" & cboMonthOSV & ".xlsx"
 
-        Dim excel_ As New WorkExcel("2019_Июль_Origin.xlsx")
-
-        path = WorkExcel.PathDirectoryOSV & "\Files\" & cboMonthOSV & ".xlsx"
-
-
-        Try
-            app = GetObject(, "Excel.Application")
-        Catch ex As Exception
-            app = CreateObject("Excel.Application")
-        End Try
+        Dim excel_ As New WorkExcel(path)
 
         If app.ScreenUpdating = False Then app.ScreenUpdating = True
 
@@ -237,7 +228,13 @@ Public Class frmMain
     End Sub
 
     Private Sub cbo_MonthOSV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_MonthOSV.SelectedIndexChanged
-        LoadComboBox(cbo_MonthOSV.Text)
+
+        ComboBox1.DataSource = LoadComboBox()
+        ComboBox1.DisplayMember = "ceh"
+        ComboBox1.ValueMember = "it"
+
+        ComboBox1.SelectedIndex = 0
+
     End Sub
 
     Dim ceh2 As String = ""
@@ -314,29 +311,7 @@ Public Class frmMain
 
     End Sub
 
-    Sub LoadComboBox(fileName As String)
-
-        dt = New DataTable()
-
-        Dim dc1 As DataColumn = New DataColumn("it")
-        Dim dc2 As DataColumn = New DataColumn("ceh")
-
-        dt.Columns.AddRange({dc1, dc2})
-
-        If (fileName = "ОСВ (Распоряжение)") Then
-            LoadTable.NewLoadTable(dt)
-        Else
-            LoadTable.LoadTable(dt)
-        End If
-
-        ComboBox1.DataSource = dt
-        ComboBox1.DisplayMember = "ceh"
-        ComboBox1.ValueMember = "it"
-
-        ComboBox1.SelectedIndex = 0
-
-
-    End Sub
+    
 
 
 

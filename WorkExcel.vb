@@ -12,19 +12,45 @@ Public Class WorkExcel
     ''' Ячейка с которой начинается таблица на листе
     ''' </summary>
     ''' <remarks></remarks>
-    Dim cellFirst As Excel.Range
+    Dim cellFirst_ As Excel.Range
+    Public Property CellFirst As Excel.Range
+        Get
+            Return cellFirst_
+        End Get
+        Set(value As Excel.Range)
+            cellFirst_ = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' Перенаименование и сортировка по этому столбцу
     ''' </summary>
     ''' <remarks></remarks>
-    Dim columnRename As Excel.Range
+    Dim columnRename_ As Excel.Range
+    Public Property ColumnRename As Excel.Range
+        Get
+            Return columnRename_
+        End Get
+        Set(value As Excel.Range)
+            columnRename_ = value
+        End Set
+    End Property
+
+
 
     ''' <summary>
     ''' Количество строк документа без шапки
     ''' </summary>
     ''' <remarks></remarks>
-    Dim rngCount As Excel.Range
+    Dim rowCount_ As Excel.Range
+    Public Property RowCount As Excel.Range
+        Get
+            Return rowCount_
+        End Get
+        Set(value As Excel.Range)
+            rowCount_ = value
+        End Set
+    End Property
 
     Dim tableObject As Excel.ListObject
 
@@ -69,8 +95,27 @@ Public Class WorkExcel
         wbook = app.Workbooks.Add(path_s)
         sheet = wbook.ActiveSheet
 
-        Me.cellFirst = sheet.Range(cellFirst)
+        Me.cellFirst_ = sheet.Range(cellFirst)
 
+
+    End Sub
+
+    Public Sub New(fileName As String)
+
+        path_ = Environment.CurrentDirectory
+        'Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
+        Dim path_s As String = Path.Combine(path_, "..\..\" & fileName)
+
+        Try
+            app = GetObject(, "Excel.Application")
+        Catch ex As Exception
+            app = CreateObject("Excel.Application")
+        End Try
+
+        If app.ScreenUpdating = False Then app.ScreenUpdating = True
+
+        wbook = app.Workbooks.Add(path_s)
+        sheet = wbook.ActiveSheet
 
     End Sub
 
@@ -134,19 +179,19 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub RenameRange(Optional ByVal columnRenameString As String = "D")
 
-        Me.columnRename = sheet.Range(columnRenameString & cellFirst.Row)
+        Me.columnRename_ = sheet.Range(columnRenameString & cellFirst_.Row)
 
         app.ScreenUpdating = False
 
-        rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
+        rowCount_ = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
 
         Dim rCount As Integer
-        rCount = rngCount.Count
+        rCount = rowCount_.Count
 
         Dim currentCell As Excel.Range
 
         For i = 1 To rCount
-            currentCell = columnRename.Offset(i, 0)
+            currentCell = columnRename_.Offset(i, 0)
 
             currentCell.Value = Replace(currentCell.Value, ".", "")
 
@@ -165,8 +210,8 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub tableCreateListObject(Optional ByVal objectName = "table1")
 
-        Dim r1 As Excel.Range = app.Range(cellFirst, cellFirst.End(Excel.XlDirection.xlToRight))
-        Dim r2 As Excel.Range = app.Range(cellFirst, cellFirst.End(Excel.XlDirection.xlDown))
+        Dim r1 As Excel.Range = app.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
+        Dim r2 As Excel.Range = app.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown))
 
         Dim table1 As Excel.Range = app.Range(r1, r2)
 
@@ -181,7 +226,7 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub sortTable()
 
-        Dim column = Me.columnRename.Column
+        Dim column = Me.columnRename_.Column
 
         tableObject.Range.Sort( _
         Key1:=tableObject.ListColumns(column).Range, Order1:=Excel.XlSortOrder.xlAscending, _
@@ -198,7 +243,7 @@ Public Class WorkExcel
 
         app.ScreenUpdating = False
 
-        cellFirst.Activate()
+        cellFirst_.Activate()
 
         Dim rngCount As Excel.Range
         rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
@@ -206,7 +251,7 @@ Public Class WorkExcel
         Dim rCount As Integer
         rCount = rngCount.Count
 
-        For i = cellFirst.Row + 1 To rngCount.Count
+        For i = cellFirst_.Row + 1 To rngCount.Count
             Dim sRow As String = i & ":" & i
             sheet.Rows(sRow).EntireRow.AutoFit()
         Next
@@ -217,7 +262,7 @@ Public Class WorkExcel
     End Sub
 
     Public Sub tableHeaderColor()
-        Dim r3 As Excel.Range = sheet.Range(cellFirst, cellFirst.End(Excel.XlDirection.xlToRight))
+        Dim r3 As Excel.Range = sheet.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
 
         With r3.Interior
             .Pattern = Excel.Constants.xlSolid
@@ -242,9 +287,9 @@ Public Class WorkExcel
 
         app.ScreenUpdating = False
 
-        cellFirst.Activate()
+        cellFirst_.Activate()
 
-        cellFirst.Value = "№ п/п"
+        cellFirst_.Value = "№ п/п"
 
         Dim rngCount As Excel.Range = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
 
@@ -253,7 +298,7 @@ Public Class WorkExcel
         Dim currentCell As Excel.Range
 
         For i = 1 To rCount - 1
-            currentCell = cellFirst.Offset(i, 0)
+            currentCell = cellFirst_.Offset(i, 0)
             currentCell.Value = i
         Next
 
