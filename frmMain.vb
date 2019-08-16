@@ -90,24 +90,26 @@ Public Class frmMain
 
         Dim excel_ As New WorkExcel(path_)
 
-        app = excel_.App
+        excel_.Visible(True)
 
-        app.Visible = True
+        'app = excel_.App
 
-        wbook = excel_.WorkBook ' app.Workbooks.Add(path_)
+        'app.Visible = True
 
-        sheet = excel_.ActiveSheet
+        'wbook = excel_.WorkBook ' app.Workbooks.Add(path_)
+
+        'sheet = excel_.ActiveSheet
 
         '=============================
 
         app.ScreenUpdating = False
         '
 
-        Try
-            sheet.ShowAllData()
-        Catch ex As Exception
-            'app.ScreenUpdating = True
-        End Try
+        'Try
+        '    sheet.ShowAllData()
+        'Catch ex As Exception
+        '    'app.ScreenUpdating = True
+        'End Try
 
         Dim rngFilter As Object = sheet.Range("table1").AutoFilter(Field:=5, Criteria1:=ceh)
 
@@ -140,44 +142,16 @@ Public Class frmMain
 
         '============================================================
 
-        Dim fileName As String = ceh
+        Dim fileName As String = ceh & "_" & monthOSV
 
         app.ScreenUpdating = True
 
+        excel_.SaveExcel(fileName)
+        excel_.SavePdf(fileName)
+
         '==========================================================
 
-        If (Environment.UserName = "Vetal") Then
-
-            
-        Else
-
-            excel_.SaveExcel(fileName & "_" & monthOSV)
-
-            Dim di1 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\Excel")
-            Try
-
-                di1.Create()
-                Dim str As String = di1.FullName & "\" & fileName & "_" & monthOSV & ".xlsx"
-                Dim fi As New FileInfo(str)
-                If fi.Exists Then
-                    fi.Delete()
-                End If
-
-                wbook.SaveAs(str, Excel.XlFileFormat.xlWorkbookDefault)
-            Catch ex As Exception
-                Dim fi As New FileInfo(WorkExcel.PathDirectoryNetwork & "\Excel\" & fileName & "_" & monthOSV & ".xlsx")
-                If fi.Exists Then
-                    fi.Delete()
-                End If
-
-                'wbook.SaveAs("\\erp\TEMP\Оборотно-сальдовая ведомость (ОСВ)\Excel\" & fileName & "_Отформатирован", Excel.XlFileFormat.xlExcel8)
-            End Try
-            Dim di2 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\PDF")
-            di2.Create()
-
-            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, di2.FullName & "\" & fileName & "_" & monthOSV & ".pdf")
-        End If
-
+        
         '==========================================================
 
         wbook.Close()

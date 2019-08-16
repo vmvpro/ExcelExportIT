@@ -104,22 +104,21 @@ Public Class WorkExcel
 
         Me.cellFirst_ = sheet_.Range(cellFirst)
 
-
     End Sub
 
-    Public ReadOnly Property App As Excel.Application
+    Private ReadOnly Property App As Excel.Application
         Get
             Return app_
         End Get
     End Property
 
-    Public ReadOnly Property WorkBook As Excel.Workbook
+    Private ReadOnly Property WorkBook As Excel.Workbook
         Get
             Return wbook_
         End Get
     End Property
 
-    Public ReadOnly Property ActiveSheet As Excel.Worksheet
+    Private ReadOnly Property ActiveSheet As Excel.Worksheet
         Get
             Return sheet_
         End Get
