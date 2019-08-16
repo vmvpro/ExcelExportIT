@@ -148,6 +148,43 @@ Public Class WorkExcel
         app_.Visible = visible_
     End Sub
 
+    Public Sub SaveExcel(fileName As String)
+
+        Dim path_ As String = Path.Combine(DirectoryExcel(), fileName & ".xlsx")
+        Dim fi As New FileInfo(path_)
+        If fi.Exists Then
+            fi.Delete()
+        End If
+
+        wbook_.SaveAs(path_, Excel.XlFileFormat.xlWorkbookDefault)
+    End Sub
+
+    Private Function DirectoryExcel() As String
+
+        Dim directoryExcel_ As New DirectoryInfo(Path.Combine(PathDirectoryNetwork, Environment.UserName, "Excel"))
+        directoryExcel_.Create()
+
+        Return directoryExcel_.FullName
+
+    End Function
+
+    Public Sub SavePdf(fileName As String)
+        Dim pathSave = Path.Combine(DirectoryPdf(), fileName & ".pdf")
+        wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, pathSave)
+    End Sub
+
+    Private Function DirectoryPdf() As String
+
+        Dim directoryPdf_ As New DirectoryInfo(Path.Combine(PathDirectoryNetwork, Environment.UserName, "Pdf"))
+        directoryPdf_.Create()
+
+        Return directoryPdf_.FullName
+
+    End Function
+
+
+
+
     ''' <summary>
     ''' 
     ''' Настройка листа.

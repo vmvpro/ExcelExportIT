@@ -150,8 +150,10 @@ Public Class frmMain
 
             
         Else
+
+            excel_.SaveExcel(fileName & "_" & monthOSV)
+
             Dim di1 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\Excel")
-            'Dim di1 As New DirectoryInfo("D:" & "\" & Environment.UserName & "\Excel")
             Try
 
                 di1.Create()
