@@ -3,9 +3,9 @@ Imports System.IO
 Imports System.Text
 
 Public Class WorkExcel
-    Private app As Excel.Application
-    Private wbook As Excel.Workbook
-    Public sheet As Excel.Worksheet
+    Private app_ As Excel.Application
+    Private wbook_ As Excel.Workbook
+    Public sheet_ As Excel.Worksheet
     Private path_ As String
 
     ''' <summary>
@@ -54,9 +54,16 @@ Public Class WorkExcel
 
     Dim tableObject As Excel.ListObject
 
-    Public Shared ReadOnly Property PathDirectoryOSV As String
+    Public Shared ReadOnly Property PathDirectoryNetwork As String
         Get
-            Return "\\erpdb\TEMP\OSV"
+            Return "\\erpdb\TEMP\OSV\Files"
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property PathDirectoryLocal As String
+        Get
+            Dim path_s As String = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\..\Files"))
+            Return path_s
         End Get
     End Property
 
@@ -85,20 +92,38 @@ Public Class WorkExcel
         Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
 
         Try
-            app = GetObject(, "Excel.Application")
+            app_ = GetObject(, "Excel.Application")
         Catch ex As Exception
-            app = CreateObject("Excel.Application")
+            app_ = CreateObject("Excel.Application")
         End Try
 
-        If app.ScreenUpdating = False Then app.ScreenUpdating = True
+        If app_.ScreenUpdating = False Then app_.ScreenUpdating = True
 
-        wbook = app.Workbooks.Add(path_s)
-        sheet = wbook.ActiveSheet
+        wbook_ = app_.Workbooks.Add(path_s)
+        sheet_ = wbook_.ActiveSheet
 
-        Me.cellFirst_ = sheet.Range(cellFirst)
+        Me.cellFirst_ = sheet_.Range(cellFirst)
 
 
     End Sub
+
+    Public ReadOnly Property App As Excel.Application
+        Get
+            Return app_
+        End Get
+    End Property
+
+    Public ReadOnly Property WorkBook As Excel.Workbook
+        Get
+            Return wbook_
+        End Get
+    End Property
+
+    Public ReadOnly Property ActiveSheet As Excel.Worksheet
+        Get
+            Return sheet_
+        End Get
+    End Property
 
     Public Sub New(fileName As String)
 
@@ -107,20 +132,20 @@ Public Class WorkExcel
         Dim path_s As String = Path.Combine(path_, "..\..\" & fileName)
 
         Try
-            app = GetObject(, "Excel.Application")
+            app_ = GetObject(, "Excel.Application")
         Catch ex As Exception
-            app = CreateObject("Excel.Application")
+            app_ = CreateObject("Excel.Application")
         End Try
 
-        If app.ScreenUpdating = False Then app.ScreenUpdating = True
+        If app_.ScreenUpdating = False Then app_.ScreenUpdating = True
 
-        wbook = app.Workbooks.Add(path_s)
-        sheet = wbook.ActiveSheet
+        wbook_ = app_.Workbooks.Add(path_s)
+        sheet_ = wbook_.ActiveSheet
 
     End Sub
 
     Sub Visible(visible_ As Boolean)
-        app.Visible = visible_
+        app_.Visible = visible_
     End Sub
 
     ''' <summary>
@@ -140,30 +165,30 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub SheetSettings()
 
-        sheet.Range("A1").Value = "Оборотно-сальдова відомість"
-        sheet.Range("A2").Value = ""
-        sheet.Range("A3").Value = ""
-        sheet.Range("A4").Value = ""
-        sheet.Range("A5").Value = ""
+        sheet_.Range("A1").Value = "Оборотно-сальдова відомість"
+        sheet_.Range("A2").Value = ""
+        sheet_.Range("A3").Value = ""
+        sheet_.Range("A4").Value = ""
+        sheet_.Range("A5").Value = ""
 
-        sheet.Columns("A:A").ColumnWidth() = 6
-        sheet.Columns("B:B").ColumnWidth() = 6
-        sheet.Columns("C:C").ColumnWidth() = 57
-        sheet.Columns("D:D").ColumnWidth() = 15
-        sheet.Columns("E:E").ColumnWidth() = 11.14
-        sheet.Columns("F:F").ColumnWidth() = 7
-        sheet.Columns("G:G").ColumnWidth() = 11.14
-        sheet.Columns("H:H").ColumnWidth() = 11.14
+        sheet_.Columns("A:A").ColumnWidth() = 6
+        sheet_.Columns("B:B").ColumnWidth() = 6
+        sheet_.Columns("C:C").ColumnWidth() = 57
+        sheet_.Columns("D:D").ColumnWidth() = 15
+        sheet_.Columns("E:E").ColumnWidth() = 11.14
+        sheet_.Columns("F:F").ColumnWidth() = 7
+        sheet_.Columns("G:G").ColumnWidth() = 11.14
+        sheet_.Columns("H:H").ColumnWidth() = 11.14
 
-        sheet.Columns("I:I").ColumnWidth() = 11.14
-        sheet.Columns("J:J").ColumnWidth() = 11.14
-        sheet.Columns("K:K").ColumnWidth() = 11.14
-        sheet.Columns("L:L").ColumnWidth() = 11.14
-        sheet.Columns("M:M").ColumnWidth() = 11.14
-        sheet.Columns("N:N").ColumnWidth() = 11.14
-        sheet.Columns("O:O").ColumnWidth() = 11.14
+        sheet_.Columns("I:I").ColumnWidth() = 11.14
+        sheet_.Columns("J:J").ColumnWidth() = 11.14
+        sheet_.Columns("K:K").ColumnWidth() = 11.14
+        sheet_.Columns("L:L").ColumnWidth() = 11.14
+        sheet_.Columns("M:M").ColumnWidth() = 11.14
+        sheet_.Columns("N:N").ColumnWidth() = 11.14
+        sheet_.Columns("O:O").ColumnWidth() = 11.14
 
-        Dim rngCC As Excel.Range = sheet.Columns("C:C")
+        Dim rngCC As Excel.Range = sheet_.Columns("C:C")
         With rngCC
             .WrapText = True        '    .Orientation = 0
             .AddIndent = False
@@ -179,11 +204,11 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub RenameRange(Optional ByVal columnRenameString As String = "D")
 
-        Me.columnRename_ = sheet.Range(columnRenameString & cellFirst_.Row)
+        Me.columnRename_ = sheet_.Range(columnRenameString & cellFirst_.Row)
 
-        app.ScreenUpdating = False
+        app_.ScreenUpdating = False
 
-        rowCount_ = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
+        rowCount_ = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
 
         Dim rCount As Integer
         rCount = rowCount_.Count
@@ -200,7 +225,7 @@ Public Class WorkExcel
 
         Next
 
-        app.ScreenUpdating = True
+        app_.ScreenUpdating = True
     End Sub
 
     ''' <summary>
@@ -210,12 +235,12 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub tableCreateListObject(Optional ByVal objectName = "table1")
 
-        Dim r1 As Excel.Range = app.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
-        Dim r2 As Excel.Range = app.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown))
+        Dim r1 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
+        Dim r2 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown))
 
-        Dim table1 As Excel.Range = app.Range(r1, r2)
+        Dim table1 As Excel.Range = app_.Range(r1, r2)
 
-        tableObject = sheet.ListObjects.AddEx(Excel.XlListObjectSourceType.xlSrcRange, table1)
+        tableObject = sheet_.ListObjects.AddEx(Excel.XlListObjectSourceType.xlSrcRange, table1)
         tableObject.Name = objectName
 
     End Sub
@@ -241,28 +266,28 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub EntireRowAutoFit()
 
-        app.ScreenUpdating = False
+        app_.ScreenUpdating = False
 
         cellFirst_.Activate()
 
         Dim rngCount As Excel.Range
-        rngCount = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
+        rngCount = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
 
         Dim rCount As Integer
         rCount = rngCount.Count
 
         For i = cellFirst_.Row + 1 To rngCount.Count
             Dim sRow As String = i & ":" & i
-            sheet.Rows(sRow).EntireRow.AutoFit()
+            sheet_.Rows(sRow).EntireRow.AutoFit()
         Next
 
-        app.ScreenUpdating = True
+        app_.ScreenUpdating = True
 
 
     End Sub
 
     Public Sub tableHeaderColor()
-        Dim r3 As Excel.Range = sheet.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
+        Dim r3 As Excel.Range = sheet_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
 
         With r3.Interior
             .Pattern = Excel.Constants.xlSolid
@@ -285,13 +310,13 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub CreateCounterRow()
 
-        app.ScreenUpdating = False
+        app_.ScreenUpdating = False
 
         cellFirst_.Activate()
 
         cellFirst_.Value = "№ п/п"
 
-        Dim rngCount As Excel.Range = app.Range(app.Selection, app.Selection.End(Excel.XlDirection.xlDown))
+        Dim rngCount As Excel.Range = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
 
         Dim rCount As Integer = rngCount.Count
 
@@ -302,9 +327,9 @@ Public Class WorkExcel
             currentCell.Value = i
         Next
 
-        sheet.Range("A" & (6 + rCount + 2)).Value = "Відповідальний:                                               __________          "
+        sheet_.Range("A" & (6 + rCount + 2)).Value = "Відповідальний:                                               __________          "
 
-        app.ScreenUpdating = True
+        app_.ScreenUpdating = True
     End Sub
 
     ''' <summary>
@@ -312,7 +337,7 @@ Public Class WorkExcel
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub PageSettings()
-        With sheet.PageSetup
+        With sheet_.PageSetup
 
             .Orientation = Excel.XlPageOrientation.xlLandscape
             .Zoom = 95

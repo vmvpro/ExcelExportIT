@@ -2,7 +2,7 @@
 
 Module myFunction
 
-    Public app As Excel.Application
+    'Public app As Excel.Application
     Public wbook As Excel.Workbook
     Public sheet As Excel.Worksheet
     Public sheet2 As Excel.Worksheet
@@ -16,18 +16,10 @@ Module myFunction
 
         dt.Columns.AddRange({dc1, dc2})
 
-        'If (fileName = "ОСВ (Распоряжение)") Then
-        '    LoadTable.NewLoadTable(dt)
-        'Else
-
-        'End If
-
         LoadTable.LoadTable(dt)
 
         Return dt
         
-
-
     End Function
 
     Public Function WorkBook(app As Object, path As String) As Excel.Workbook
@@ -81,19 +73,19 @@ Module myFunction
     End Sub
 
 
-    Public Function tableCreateListObject(cell As Excel.Range) As Excel.ListObject
+    'Public Function tableCreateListObject(cell As Excel.Range) As Excel.ListObject
 
-        Dim r1 As Excel.Range = app.Range(cell, cell.End(Excel.XlDirection.xlToRight))
-        Dim r2 As Excel.Range = app.Range(cell, cell.End(Excel.XlDirection.xlDown))
+    '    Dim r1 As Excel.Range = app.Range(cell, cell.End(Excel.XlDirection.xlToRight))
+    '    Dim r2 As Excel.Range = app.Range(cell, cell.End(Excel.XlDirection.xlDown))
 
-        Dim table1 As Excel.Range = app.Range(r1, r2)
+    '    Dim table1 As Excel.Range = app.Range(r1, r2)
 
-        Dim tableObject As Excel.ListObject = sheet.ListObjects.AddEx(Excel.XlListObjectSourceType.xlSrcRange, table1)
-        tableObject.Name = "table1"
+    '    Dim tableObject As Excel.ListObject = sheet.ListObjects.AddEx(Excel.XlListObjectSourceType.xlSrcRange, table1)
+    '    tableObject.Name = "table1"
 
-        Return tableObject
+    '    Return tableObject
 
-    End Function
+    'End Function
 
     Public Sub sortTable(tableObject As Excel.ListObject, column As Integer)
         tableObject.Range.Sort( _
@@ -121,30 +113,30 @@ Module myFunction
 
     End Sub
 
-    Public Sub RenameRange(rngCount As Excel.Range, columnRename As Excel.Range)
+    'Public Sub RenameRange(rngCount As Excel.Range, columnRename As Excel.Range)
 
-        app.ScreenUpdating = False
+    '    app.ScreenUpdating = False
 
-        Dim rCount As Integer
-        rCount = rngCount.Count
+    '    Dim rCount As Integer
+    '    rCount = rngCount.Count
 
-        Dim currentCell As Excel.Range
+    '    Dim currentCell As Excel.Range
 
-        For i = 1 To rCount
-            currentCell = columnRename.Offset(i, 0)
+    '    For i = 1 To rCount
+    '        currentCell = columnRename.Offset(i, 0)
 
-            Dim rep As String = ""
-            rep = Replace(currentCell.Value, ".", "")
+    '        Dim rep As String = ""
+    '        rep = Replace(currentCell.Value, ".", "")
 
-            currentCell.Value = rep
+    '        currentCell.Value = rep
 
-            currentCell.NumberFormat = "0"
-            currentCell.HorizontalAlignment = Excel.Constants.xlLeft
+    '        currentCell.NumberFormat = "0"
+    '        currentCell.HorizontalAlignment = Excel.Constants.xlLeft
 
-        Next
+    '    Next
 
-        app.ScreenUpdating = True
-    End Sub
+    '    app.ScreenUpdating = True
+    'End Sub
 
     Public Sub PageSettings()
         With sheet.PageSetup

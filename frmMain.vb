@@ -4,11 +4,17 @@ Imports System.Text
 
 Public Class frmMain
 
+    Dim app As Excel.Application
+    Private wbook As Excel.Workbook
+    Public sheet As Excel.Worksheet
+
+
     Dim dt As New DataTable
+
     Private Sub btnCreateOSV_Click(sender As Object, e As EventArgs) Handles btnCreateOSV.Click
         Label2.Text = ""
 
-        If (cbo_MonthOSV.Text = String.Empty) Then
+        If (cboMonth.Text = String.Empty) Then
             MessageBox.Show("Выберите месяц по которому формируете Оборотно-сальдовую ведомость", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return
         End If
@@ -17,7 +23,7 @@ Public Class frmMain
 
 
         Try
-            If CheckBox1.Checked Then
+            If chkIsAllCeh.Checked Then
                 Dim result As DialogResult = MessageBox.Show("Формирование отчетов по всем складам будет длительное время, желаете продолжить?", "Оповещение", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
 
                 If result = Windows.Forms.DialogResult.Yes Then
@@ -32,7 +38,7 @@ Public Class frmMain
             Else
                 Me.Visible = False
 
-                MySub(ceh2, cbo_MonthOSV.Text)
+                MySub(ceh2, cboMonth.Text)
 
                 Me.Visible = True
 
@@ -62,7 +68,7 @@ Public Class frmMain
         Me.Visible = False
         For Each row As DataRow In dt.Rows
             Try
-                MySub(row("it").ToString(), cbo_MonthOSV.Text)
+                MySub(row("it").ToString(), cboMonth.Text)
             Catch ex As Exception
                 sb.Append(row("it").ToString() & Environment.NewLine & ex.Message + Environment.NewLine)
             End Try
@@ -78,19 +84,22 @@ Public Class frmMain
     End Function
 
 
-    Sub MySub(ceh As String, cboMonthOSV As String)
+    Sub MySub(ceh As String, monthOSV As String)
 
-        Dim path As String = WorkExcel.PathDirectoryOSV & "\Files\" & cboMonthOSV & ".xlsx"
+        Dim path_ As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
 
-        Dim excel_ As New WorkExcel(path)
+        Dim excel_ As New WorkExcel(path_)
+
+        app = excel_.App
+
 
         If app.ScreenUpdating = False Then app.ScreenUpdating = True
 
         app.Visible = True
 
-        wbook = app.Workbooks.Add(path)
+        wbook = excel_.WorkBook ' app.Workbooks.Add(path_)
 
-        sheet = wbook.ActiveSheet
+        sheet = excel_.ActiveSheet
 
         '=============================
 
@@ -126,12 +135,12 @@ Public Class frmMain
         Dim rngAA As Excel.Range = sheet.Columns("A:A")
 
         sheet.Range("A1").Value = "Оборотно-сальдова відомість"
-        sheet.Range("A2").Value = "За рахунками: 20, 22, 281"
-        sheet.Range("A3").Value = cbo_MonthOSV.Text
+        sheet.Range("A2").Value = "За рахунками: 20, 22, 28"
+        sheet.Range("A3").Value = cboMonth.Text()
         sheet.Range("A4").Value = ceh
 
         sheet.Columns("E:E").Hidden = True
-        
+
         '============================================================
 
         Dim fileName As String = ceh
@@ -143,29 +152,29 @@ Public Class frmMain
         If (Environment.UserName = "Vetal") Then
 
             Try
-                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & cboMonthOSV & ".xls")
+                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
                 If fi.Exists Then
                     fi.Delete()
                 End If
-                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & cboMonthOSV, Excel.XlFileFormat.xlWorkbookDefault)
+                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlWorkbookDefault)
             Catch ex As Exception
 
-                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & cboMonthOSV & ".xls")
+                Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
                 If fi.Exists Then
                     fi.Delete()
                 End If
 
-                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & cboMonthOSV, Excel.XlFileFormat.xlExcel8)
+                wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlExcel8)
             End Try
 
-            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & cboMonthOSV & ".pdf")
+            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & monthOSV & ".pdf")
         Else
-            Dim di1 As New DirectoryInfo(WorkExcel.PathDirectoryOSV & "\" & Environment.UserName & "\Excel")
+            Dim di1 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\Excel")
             'Dim di1 As New DirectoryInfo("D:" & "\" & Environment.UserName & "\Excel")
             Try
 
                 di1.Create()
-                Dim str As String = di1.FullName & "\" & fileName & "_" & cboMonthOSV & ".xlsx"
+                Dim str As String = di1.FullName & "\" & fileName & "_" & monthOSV & ".xlsx"
                 Dim fi As New FileInfo(str)
                 If fi.Exists Then
                     fi.Delete()
@@ -173,17 +182,17 @@ Public Class frmMain
 
                 wbook.SaveAs(str, Excel.XlFileFormat.xlWorkbookDefault)
             Catch ex As Exception
-                Dim fi As New FileInfo(WorkExcel.PathDirectoryOSV & "\Excel\" & fileName & "_" & cboMonthOSV & ".xlsx")
+                Dim fi As New FileInfo(WorkExcel.PathDirectoryNetwork & "\Excel\" & fileName & "_" & monthOSV & ".xlsx")
                 If fi.Exists Then
                     fi.Delete()
                 End If
 
                 'wbook.SaveAs("\\erp\TEMP\Оборотно-сальдовая ведомость (ОСВ)\Excel\" & fileName & "_Отформатирован", Excel.XlFileFormat.xlExcel8)
             End Try
-            Dim di2 As New DirectoryInfo(WorkExcel.PathDirectoryOSV & "\" & Environment.UserName & "\PDF")
+            Dim di2 As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\PDF")
             di2.Create()
 
-            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, di2.FullName & "\" & fileName & "_" & cboMonthOSV & ".pdf")
+            wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, di2.FullName & "\" & fileName & "_" & monthOSV & ".pdf")
         End If
 
         '==========================================================
@@ -212,53 +221,53 @@ Public Class frmMain
 
         'Dim path_ = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "\Files\Months.dat"))
         'Dim path_ = Path.Combine(Environment.CurrentDirectory, "Files\Months.dat")
-        Dim path_ = Path.Combine(WorkExcel.PathDirectoryOSV, "Files\Months.dat")
+        Dim path_ = Path.Combine(WorkExcel.PathDirectoryNetwork, "Files\Months.dat")
 
         Dim files As New StreamReader(path_)
         Dim filesArray = File.ReadLines(path_).ToArray
 
-        cbo_MonthOSV.Items.Add("")
+        cboMonth.Items.Add("")
 
         For i As Int32 = 0 To filesArray.Length - 1
-            cbo_MonthOSV.Items.Add(filesArray(i))
+            cboMonth.Items.Add(filesArray(i))
         Next
 
-        cbo_MonthOSV.SelectedIndex = 0
+        cboMonth.SelectedIndex = 0
 
     End Sub
 
-    Private Sub cbo_MonthOSV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_MonthOSV.SelectedIndexChanged
+    Private Sub cbo_MonthOSV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboMonth.SelectedIndexChanged
 
-        ComboBox1.DataSource = LoadComboBox()
-        ComboBox1.DisplayMember = "ceh"
-        ComboBox1.ValueMember = "it"
+        cboCeh.DataSource = LoadComboBox()
+        cboCeh.DisplayMember = "ceh"
+        cboCeh.ValueMember = "it"
 
-        ComboBox1.SelectedIndex = 0
+        cboCeh.SelectedIndex = 0
 
     End Sub
 
     Dim ceh2 As String = ""
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        'ceh = ComboBox1.Text
+    Private Sub cbo_Ceh_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCeh.SelectedIndexChanged
+
         Dim ceh As String = ""
-        ceh = DirectCast(ComboBox1.SelectedItem, System.Data.DataRowView).Row.ItemArray(0).ToString
+        ceh = DirectCast(cboCeh.SelectedItem, System.Data.DataRowView).Row.ItemArray(0).ToString
         ceh2 = ceh
 
     End Sub
 
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        ComboBox1.Enabled = Not CheckBox1.Checked
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles chkIsAllCeh.CheckedChanged
+        cboCeh.Enabled = Not chkIsAllCeh.Checked
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Dim di As New DirectoryInfo(WorkExcel.PathDirectoryOSV & "\" & Environment.UserName & "\PDF")
+        Dim di As New DirectoryInfo(WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName & "\PDF")
         di.Create()
 
     End Sub
 
     Private Sub btnOpenCurrentDirectory_Click(sender As Object, e As EventArgs) Handles btnOpenCurrentDirectory.Click, btnOpenFiles.Click
-        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryOSV & "\" & Environment.UserName)
+        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName)
     End Sub
 
     Private Sub btnSettings_Click(sender As Object, e As EventArgs) Handles btnSettings.Click
@@ -311,11 +320,11 @@ Public Class frmMain
 
     End Sub
 
-    
+
 
 
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryOSV & "\Files")
+        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryNetwork & "\Files")
     End Sub
 End Class

@@ -24,13 +24,13 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.btnCreateOSV = New System.Windows.Forms.Button()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.cboCeh = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.chkIsAllCeh = New System.Windows.Forms.CheckBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.btnOpenCurrentDirectory = New System.Windows.Forms.Button()
-        Me.cbo_MonthOSV = New System.Windows.Forms.ComboBox()
+        Me.cboMonth = New System.Windows.Forms.ComboBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btnSettings = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -50,11 +50,11 @@ Partial Class frmMain
         '
         'ComboBox1
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(59, 37)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(374, 21)
-        Me.ComboBox1.TabIndex = 1
+        Me.cboCeh.FormattingEnabled = True
+        Me.cboCeh.Location = New System.Drawing.Point(59, 37)
+        Me.cboCeh.Name = "ComboBox1"
+        Me.cboCeh.Size = New System.Drawing.Size(374, 21)
+        Me.cboCeh.TabIndex = 1
         '
         'Label1
         '
@@ -76,13 +76,13 @@ Partial Class frmMain
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(12, 124)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(193, 17)
-        Me.CheckBox1.TabIndex = 4
-        Me.CheckBox1.Text = "Сформировать по всем складам"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.chkIsAllCeh.AutoSize = True
+        Me.chkIsAllCeh.Location = New System.Drawing.Point(12, 124)
+        Me.chkIsAllCeh.Name = "CheckBox1"
+        Me.chkIsAllCeh.Size = New System.Drawing.Size(193, 17)
+        Me.chkIsAllCeh.TabIndex = 4
+        Me.chkIsAllCeh.Text = "Сформировать по всем складам"
+        Me.chkIsAllCeh.UseVisualStyleBackColor = True
         '
         'Button3
         '
@@ -104,12 +104,12 @@ Partial Class frmMain
         '
         'cbo_MonthOSV
         '
-        Me.cbo_MonthOSV.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbo_MonthOSV.FormattingEnabled = True
-        Me.cbo_MonthOSV.Location = New System.Drawing.Point(104, 10)
-        Me.cbo_MonthOSV.Name = "cbo_MonthOSV"
-        Me.cbo_MonthOSV.Size = New System.Drawing.Size(162, 21)
-        Me.cbo_MonthOSV.TabIndex = 7
+        Me.cboMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboMonth.FormattingEnabled = True
+        Me.cboMonth.Location = New System.Drawing.Point(104, 10)
+        Me.cboMonth.Name = "cbo_MonthOSV"
+        Me.cboMonth.Size = New System.Drawing.Size(162, 21)
+        Me.cboMonth.TabIndex = 7
         '
         'Label2
         '
@@ -166,13 +166,13 @@ Partial Class frmMain
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btnSettings)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.cbo_MonthOSV)
+        Me.Controls.Add(Me.cboMonth)
         Me.Controls.Add(Me.btnOpenCurrentDirectory)
         Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.chkIsAllCeh)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox1)
+        Me.Controls.Add(Me.cboCeh)
         Me.Controls.Add(Me.btnCreateOSV)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -185,13 +185,13 @@ Partial Class frmMain
 
     End Sub
     Friend WithEvents btnCreateOSV As System.Windows.Forms.Button
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents cboCeh As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents chkIsAllCeh As System.Windows.Forms.CheckBox
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents btnOpenCurrentDirectory As System.Windows.Forms.Button
-    Friend WithEvents cbo_MonthOSV As System.Windows.Forms.ComboBox
+    Friend WithEvents cboMonth As System.Windows.Forms.ComboBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents btnSettings As System.Windows.Forms.Button
     Friend WithEvents Label3 As System.Windows.Forms.Label
