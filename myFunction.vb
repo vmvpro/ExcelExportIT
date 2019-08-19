@@ -3,9 +3,9 @@
 Module myFunction
 
     'Public app As Excel.Application
-    Public wbook As Excel.Workbook
-    Public sheet As Excel.Worksheet
-    Public sheet2 As Excel.Worksheet
+    'Public wbook As Excel.Workbook
+    'Public sheet As Excel.Worksheet
+    'Public sheet2 As Excel.Worksheet
 
     Public Function LoadComboBox() As DataTable
 
@@ -41,36 +41,36 @@ Module myFunction
 
     End Function
 
-    Public Sub SheetSettings()
+    'Public Sub SheetSettings()
 
-        sheet.Columns("A:A").ColumnWidth() = 6
-        sheet.Columns("B:B").ColumnWidth() = 57
-        sheet.Columns("C:C").ColumnWidth() = 15
-        sheet.Columns("D:D").ColumnWidth() = 11.14
-        sheet.Columns("E:E").ColumnWidth() = 7
-        sheet.Columns("F:F").ColumnWidth() = 11.14
-        sheet.Columns("G:G").ColumnWidth() = 11.14
-        sheet.Columns("H:H").ColumnWidth() = 11.14
+    '    sheet.Columns("A:A").ColumnWidth() = 6
+    '    sheet.Columns("B:B").ColumnWidth() = 57
+    '    sheet.Columns("C:C").ColumnWidth() = 15
+    '    sheet.Columns("D:D").ColumnWidth() = 11.14
+    '    sheet.Columns("E:E").ColumnWidth() = 7
+    '    sheet.Columns("F:F").ColumnWidth() = 11.14
+    '    sheet.Columns("G:G").ColumnWidth() = 11.14
+    '    sheet.Columns("H:H").ColumnWidth() = 11.14
 
-        sheet.Columns("I:I").ColumnWidth() = 11.14
-        sheet.Columns("J:J").ColumnWidth() = 11.14
-        sheet.Columns("K:K").ColumnWidth() = 11.14
-        sheet.Columns("L:L").ColumnWidth() = 11.14
-        sheet.Columns("M:M").ColumnWidth() = 11.14
-        sheet.Columns("N:N").ColumnWidth() = 11.14
+    '    sheet.Columns("I:I").ColumnWidth() = 11.14
+    '    sheet.Columns("J:J").ColumnWidth() = 11.14
+    '    sheet.Columns("K:K").ColumnWidth() = 11.14
+    '    sheet.Columns("L:L").ColumnWidth() = 11.14
+    '    sheet.Columns("M:M").ColumnWidth() = 11.14
+    '    sheet.Columns("N:N").ColumnWidth() = 11.14
 
-        Dim rngBB As Excel.Range = sheet.Columns("B:B")
-        With rngBB
-            .WrapText = True        '    .Orientation = 0
-            .AddIndent = False
-            .ShrinkToFit = False
-            .ReadingOrder = Excel.Constants.xlContext
-            .MergeCells = False
-        End With
+    '    Dim rngBB As Excel.Range = sheet.Columns("B:B")
+    '    With rngBB
+    '        .WrapText = True        '    .Orientation = 0
+    '        .AddIndent = False
+    '        .ShrinkToFit = False
+    '        .ReadingOrder = Excel.Constants.xlContext
+    '        .MergeCells = False
+    '    End With
 
-        
 
-    End Sub
+
+    'End Sub
 
 
     'Public Function tableCreateListObject(cell As Excel.Range) As Excel.ListObject
@@ -95,23 +95,23 @@ Module myFunction
         Header:=Excel.XlYesNoGuess.xlYes)
     End Sub
 
-    Public Sub tableHeaderColor(cell As Excel.Range)
-        Dim r3 As Excel.Range = sheet.Range(cell, cell.End(Excel.XlDirection.xlToRight))
+    'Public Sub tableHeaderColor(cell As Excel.Range)
+    '    Dim r3 As Excel.Range = sheet.Range(cell, cell.End(Excel.XlDirection.xlToRight))
 
-        With r3.Interior
-            .Pattern = Excel.Constants.xlSolid
-            .PatternColorIndex = Excel.Constants.xlAutomatic
-            .ThemeColor = Excel.XlThemeColor.xlThemeColorLight1
-            .TintAndShade = 0.499984740745262
-            .PatternTintAndShade = 0
-        End With
+    '    With r3.Interior
+    '        .Pattern = Excel.Constants.xlSolid
+    '        .PatternColorIndex = Excel.Constants.xlAutomatic
+    '        .ThemeColor = Excel.XlThemeColor.xlThemeColorLight1
+    '        .TintAndShade = 0.499984740745262
+    '        .PatternTintAndShade = 0
+    '    End With
 
-        With r3.Font
-            .ThemeColor = Excel.XlThemeColor.xlThemeColorDark1
-            .TintAndShade = 0
-        End With
+    '    With r3.Font
+    '        .ThemeColor = Excel.XlThemeColor.xlThemeColorDark1
+    '        .TintAndShade = 0
+    '    End With
 
-    End Sub
+    'End Sub
 
     'Public Sub RenameRange(rngCount As Excel.Range, columnRename As Excel.Range)
 
@@ -138,31 +138,31 @@ Module myFunction
     '    app.ScreenUpdating = True
     'End Sub
 
-    Public Sub PageSettings()
-        With sheet.PageSetup
+    'Public Sub PageSettings()
+    '    With sheet.PageSetup
 
-            '.LeftMargin = 0.196850393700787
-            '.RightMargin = 0.196850393700787
-            '.TopMargin = 0.196850393700787
-            '.BottomMargin = 0.196850393700787
+    '        '.LeftMargin = 0.196850393700787
+    '        '.RightMargin = 0.196850393700787
+    '        '.TopMargin = 0.196850393700787
+    '        '.BottomMargin = 0.196850393700787
 
-            .Orientation = Excel.XlPageOrientation.xlLandscape
-            .Zoom = 95
+    '        .Orientation = Excel.XlPageOrientation.xlLandscape
+    '        .Zoom = 95
 
-            .LeftMargin = 0.196850393700787
-            .RightMargin = 0.196850393700787
-            .TopMargin = 0.393700787401575
-            .BottomMargin = 0.393700787401575
+    '        .LeftMargin = 0.196850393700787
+    '        .RightMargin = 0.196850393700787
+    '        .TopMargin = 0.393700787401575
+    '        .BottomMargin = 0.393700787401575
 
-            .CenterHorizontally = True
-            .CenterVertically = True
+    '        .CenterHorizontally = True
+    '        .CenterVertically = True
 
-            .HeaderMargin = 0
-            .FooterMargin = 0
+    '        .HeaderMargin = 0
+    '        .FooterMargin = 0
 
-            .PaperSize = Excel.XlPaperSize.xlPaperA3
+    '        .PaperSize = Excel.XlPaperSize.xlPaperA3
 
-        End With
-    End Sub
+    '    End With
+    'End Sub
 
 End Module

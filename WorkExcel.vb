@@ -8,6 +8,22 @@ Public Class WorkExcel
     Public sheet_ As Excel.Worksheet
     Private path_ As String
 
+    Private Const tableObjectName = "table1"
+
+    ''' <summary>
+    ''' Ячейка с которой начинается таблица на листе
+    ''' </summary>
+    ''' <remarks></remarks>
+    Dim filterField_ As Integer
+    Public Property FilterField As Integer
+        Get
+            Return filterField_
+        End Get
+        Set(value As Integer)
+            filterField_ = value
+        End Set
+    End Property
+
     ''' <summary>
     ''' Ячейка с которой начинается таблица на листе
     ''' </summary>
@@ -124,11 +140,11 @@ Public Class WorkExcel
         End Get
     End Property
 
-    Public Sub New(fileName As String)
+    Public Sub New(pathFile As String)
 
-        path_ = Environment.CurrentDirectory
+        'path_ = Environment.CurrentDirectory
         'Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
-        Dim path_s As String = Path.Combine(path_, "..\..\" & fileName)
+        'Dim path_s As String = Path.Combine(path_, "..\..\" & fileName)
 
         Try
             app_ = GetObject(, "Excel.Application")
@@ -138,13 +154,32 @@ Public Class WorkExcel
 
         If app_.ScreenUpdating = False Then app_.ScreenUpdating = True
 
-        wbook_ = app_.Workbooks.Add(path_s)
+        wbook_ = app_.Workbooks.Add(pathFile)
         sheet_ = wbook_.ActiveSheet
 
     End Sub
 
-    Sub Visible(visible_ As Boolean)
+    Sub AutoFilter(ceh As String)
+
+        'Dim columnName = tableObjectName & "[[#Headers],[Підрозділи]]"
+
+        'Dim field = sheet_.Range(columnName)
+
+        sheet_.Range(tableObjectName).AutoFilter(Field:=5, Criteria1:=ceh)
+    End Sub
+
+    Public Sub ScreenUpdating(bool As Boolean)
+        app_.ScreenUpdating = bool
+    End Sub
+
+    Public Sub Visible(visible_ As Boolean)
         app_.Visible = visible_
+    End Sub
+
+    Public Sub WorkBookClose()
+        wbook_.Close()
+
+        If (app_.Workbooks.Count = 0) Then app_.Quit()
     End Sub
 
     Public Sub SaveExcel(fileName As String)
@@ -169,7 +204,7 @@ Public Class WorkExcel
 
     Public Sub SavePdf(fileName As String)
         Dim pathSave = Path.Combine(DirectoryPdf(), fileName & ".pdf")
-        wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, pathSave)
+        wbook_.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, pathSave)
     End Sub
 
     Private Function DirectoryPdf() As String
@@ -181,7 +216,22 @@ Public Class WorkExcel
 
     End Function
 
+    Public Sub HeaderCells(month As String, ceh As String)
+        For k = 1 To 5
+            App.Range("A" & k).Value = ""
+        Next
 
+        Dim rngAA As Excel.Range = sheet_.Columns("A:A")
+
+        sheet_.Range("A1").Value = "Оборотно-сальдова відомість"
+        sheet_.Range("A2").Value = "За рахунками: 20, 22, 28"
+        sheet_.Range("A3").Value = month
+        sheet_.Range("A4").Value = ceh
+    End Sub
+
+    Public Sub ColumnHidden(column As String)
+        sheet_.Columns(column).Hidden = True
+    End Sub
 
 
     ''' <summary>
@@ -199,13 +249,7 @@ Public Class WorkExcel
     ''' </summary>
     ''' 
     ''' <remarks></remarks>
-    Public Sub SheetSettings()
-
-        sheet_.Range("A1").Value = "Оборотно-сальдова відомість"
-        sheet_.Range("A2").Value = ""
-        sheet_.Range("A3").Value = ""
-        sheet_.Range("A4").Value = ""
-        sheet_.Range("A5").Value = ""
+    Public Sub ColumnsWidth()
 
         sheet_.Columns("A:A").ColumnWidth() = 6
         sheet_.Columns("B:B").ColumnWidth() = 6
@@ -224,8 +268,20 @@ Public Class WorkExcel
         sheet_.Columns("N:N").ColumnWidth() = 11.14
         sheet_.Columns("O:O").ColumnWidth() = 11.14
 
-        Dim rngCC As Excel.Range = sheet_.Columns("C:C")
-        With rngCC
+    End Sub
+
+    Public Sub ClearHeaderCells()
+        sheet_.Range("A1").Value = "Оборотно-сальдова відомість"
+        sheet_.Range("A2").Value = ""
+        sheet_.Range("A3").Value = ""
+        sheet_.Range("A4").Value = ""
+        sheet_.Range("A5").Value = ""
+    End Sub
+
+
+    Public Sub AutoWidthColumnResources(column As String)
+        Dim columnRange As Excel.Range = sheet_.Columns(column) '"C:C"
+        With columnRange
             .WrapText = True        '    .Orientation = 0
             .AddIndent = False
             .ShrinkToFit = False
@@ -267,9 +323,8 @@ Public Class WorkExcel
     ''' <summary>
     ''' Создание объекта таблице в книге Excel (по умолчанию объект таблица = "table1")
     ''' </summary>
-    ''' <param name="objectName">Имя объекта Таблицы</param>
     ''' <remarks></remarks>
-    Public Sub tableCreateListObject(Optional ByVal objectName = "table1")
+    Public Sub tableCreateListObject()
 
         Dim r1 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
         Dim r2 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown))
@@ -277,7 +332,7 @@ Public Class WorkExcel
         Dim table1 As Excel.Range = app_.Range(r1, r2)
 
         tableObject = sheet_.ListObjects.AddEx(Excel.XlListObjectSourceType.xlSrcRange, table1)
-        tableObject.Name = objectName
+        tableObject.Name = tableObjectName
 
     End Sub
 

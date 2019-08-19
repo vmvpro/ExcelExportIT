@@ -4,9 +4,9 @@ Imports System.Text
 
 Public Class frmMain
 
-    Dim app As Excel.Application
-    Private wbook As Excel.Workbook
-    Public sheet As Excel.Worksheet
+    'Dim app As Excel.Application
+    'Private wbook As Excel.Workbook
+    'Public sheet As Excel.Worksheet
 
 
     Dim dt As New DataTable
@@ -51,8 +51,8 @@ Public Class frmMain
             Label2.Text = "По " & ceh2 & " ничего не найдено!!!"
             Debug.WriteLine(ex.Message & Environment.NewLine + "По " & ceh2 & " ничего не найдено!!!")
 
-            wbook.Close(False)
-            app.WindowState = Excel.XlWindowState.xlMinimized
+            'wbook.Close(False)
+            'app.WindowState = Excel.XlWindowState.xlMinimized
             Me.Visible = True
 
             Exit Sub
@@ -86,77 +86,34 @@ Public Class frmMain
 
     Sub MySub(ceh As String, monthOSV As String)
 
-        Dim path_ As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
+        Dim pathFile As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
 
-        Dim excel_ As New WorkExcel(path_)
+        Dim excel_ As New WorkExcel(pathFile)
 
         excel_.Visible(True)
 
-        'app = excel_.App
-
-        'app.Visible = True
-
-        'wbook = excel_.WorkBook ' app.Workbooks.Add(path_)
-
-        'sheet = excel_.ActiveSheet
-
         '=============================
 
-        app.ScreenUpdating = False
-        '
+        excel_.ScreenUpdating(False)
 
-        'Try
-        '    sheet.ShowAllData()
-        'Catch ex As Exception
-        '    'app.ScreenUpdating = True
-        'End Try
+        excel_.AutoFilter(ceh)
 
-        Dim rngFilter As Object = sheet.Range("table1").AutoFilter(Field:=5, Criteria1:=ceh)
+        excel_.HeaderCells(cboMonth.Text, ceh)
 
-        Dim rngRow As Excel.Range = sheet.Range("table1").Find(ceh)
-        Dim rngFirst As Excel.Range = sheet.Cells(rngRow.Row, 1)
+        excel_.ColumnHidden("E:E")
 
-        rngFirst.Select()
-
-        Dim rngB As Excel.Range = rngFirst.Offset(0, 1)
-        rngB.Select()
-
-        app.ScreenUpdating = True
-
-        sheet.Range("A6").Select()
-        sheet.Range("A7").Activate()
-
-        For k = 1 To 5
-            app.Range("A" & k).Value = ""
-        Next
-
-
-        Dim rngAA As Excel.Range = sheet.Columns("A:A")
-
-        sheet.Range("A1").Value = "Оборотно-сальдова відомість"
-        sheet.Range("A2").Value = "За рахунками: 20, 22, 28"
-        sheet.Range("A3").Value = cboMonth.Text()
-        sheet.Range("A4").Value = ceh
-
-        sheet.Columns("E:E").Hidden = True
+        excel_.ScreenUpdating(True)
 
         '============================================================
 
         Dim fileName As String = ceh & "_" & monthOSV
-
-        app.ScreenUpdating = True
 
         excel_.SaveExcel(fileName)
         excel_.SavePdf(fileName)
 
         '==========================================================
 
-        
-        '==========================================================
-
-        wbook.Close()
-
-        If (app.Workbooks.Count = 0) Then app.Quit()
+        excel_.WorkBookClose()
 
     End Sub
 
@@ -175,7 +132,7 @@ Public Class frmMain
 
         'Dim path_ = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "\Files\Months.dat"))
         'Dim path_ = Path.Combine(Environment.CurrentDirectory, "Files\Months.dat")
-        Dim path_ = Path.Combine(WorkExcel.PathDirectoryNetwork, "Files\Months.dat")
+        Dim path_ = Path.Combine(WorkExcel.PathDirectoryNetwork, "Months.dat")
 
         Dim files As New StreamReader(path_)
         Dim filesArray = File.ReadLines(path_).ToArray
@@ -250,7 +207,7 @@ Public Class frmMain
         excel_.CreateCounterRow()
 
         ' Настроить колонки листа
-        excel_.SheetSettings()
+        excel_.ColumnsWidth()
 
         ' Настройка страницы печати (А3, отступы, масштаб = 95%)
         excel_.PageSettings()
@@ -288,7 +245,7 @@ Public Class frmMain
             If fi.Exists Then
                 fi.Delete()
             End If
-            wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlWorkbookDefault)
+            'wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlWorkbookDefault)
         Catch ex As Exception
 
             Dim fi As New FileInfo("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV & ".xls")
@@ -296,9 +253,9 @@ Public Class frmMain
                 fi.Delete()
             End If
 
-            wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlExcel8)
+            'wbook.SaveAs("d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\TempExcel\" & fileName & "_" & monthOSV, Excel.XlFileFormat.xlExcel8)
         End Try
 
-        wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & monthOSV & ".pdf")
+        'wbook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, "d:\Doc\Work\MS Visual Studio\1_MyApplication\ExcelExportIT\PDF\" & fileName & "_" & monthOSV & ".pdf")
     End Sub
 End Class
