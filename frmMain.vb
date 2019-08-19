@@ -98,9 +98,9 @@ Public Class frmMain
 
         excel_.AutoFilter(ceh)
 
-        excel_.HeaderCells(cboMonth.Text, ceh)
+        excel_.WriteHeaderCells(cboMonth.Text, ceh)
 
-        excel_.ColumnHidden("E:E")
+        excel_.ColumnHiddenCeh("E:E")
 
         excel_.ScreenUpdating(True)
 
@@ -192,14 +192,10 @@ Public Class frmMain
         ' так как файл Excel после сортировки таким образом меняет структуру
         ' после которой невозможно открыть файл программным образом
         '
-        ' Т.е. файл  сначала закрыть, потом открыть на все всплывающие окна ответить 
-        ' положительно и пересохранить с тем же именем
+        ' Т.е. файл  сначала закрыть, потом открыть и на все всплывающие окна ответить 
+        ' положительно, затем следует пересохранить с тем же именем.
 
     End Sub
-
-
-
-
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryNetwork & "\Files")

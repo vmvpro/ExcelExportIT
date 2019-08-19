@@ -2,24 +2,26 @@
 Public Class SettingsSheetExcel
     Public Shared Sub Run()
         ' Файл находится в папке там где запускается исходник (не в папке bin\)
-        Dim excel_ As New WorkExcel("2019_Июль_Origin.xlsx", "A6")
+        Dim excel_ As New WorkExcel("test_ceh05.xlsx", "A6")
 
         excel_.Visible(True)
+
+        'excel_.CellFirst = "A6"
 
         ' Настройка ширины колонок
         excel_.ColumnsWidth()
 
         ' Переименовать столбец (Переименование столбца со старым кодом )
-        excel_.RenameColumn("D")
+        excel_.ColumnEditingOldResources("D")
 
         ' Загловок таблицы сделать цветным
-        excel_.tableHeaderColor()
+        excel_.TableHeaderColor()
 
         ' Создание в книге объекта таблица
-        excel_.tableCreateListObject()
+        excel_.TableCreateListObject()
 
         ' Сортировка столбца в таблице (старый шифр)
-        excel_.sortTable()
+        excel_.SortTable()
 
         ' Выравнивание строк по содержимому
         excel_.EntireRowAutoFit()
@@ -30,8 +32,8 @@ Public Class SettingsSheetExcel
         ' Настроить колонки листа
         excel_.ColumnsWidth()
 
-        'Авто-ширина столбца ресурс (перенос по словам и определенной ширины)
-        excel_.AutoWidthColumnResources("C:C")
+        ' Авто-высота столбца ресурс по содержимому (перенос по словам и определенной ширины)
+        excel_.AutoHeightColumnResources("C")
 
         ' Настройка страницы печати (А3, отступы, масштаб = 95%)
         excel_.PageSettings()
@@ -40,6 +42,9 @@ Public Class SettingsSheetExcel
         ' Не забыть пересохранить файл Ексель, 
         ' так как файл Excel после сортировки таким образом меняет структуру
         ' после которой невозможно открыть файл программным образом
+        '
+        ' Т.е. файл  сначала закрыть, потом открыть и на все всплывающие окна ответить 
+        ' положительно, затем следует пересохранить с тем же именем.
     End Sub
 
 End Class

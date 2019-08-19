@@ -29,26 +29,18 @@ Public Class WorkExcel
     ''' </summary>
     ''' <remarks></remarks>
     Dim cellFirst_ As Excel.Range
-    Public Property CellFirst As Excel.Range
-        Get
-            Return cellFirst_
-        End Get
-        Set(value As Excel.Range)
-            cellFirst_ = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Перенаименование и сортировка по этому столбцу
     ''' </summary>
     ''' <remarks></remarks>
-    Dim columnRename_ As Excel.Range
+    Dim columnEditingOldResources_ As Excel.Range
     Public Property ColumnRename As Excel.Range
         Get
-            Return columnRename_
+            Return columnEditingOldResources_
         End Get
         Set(value As Excel.Range)
-            columnRename_ = value
+            columnEditingOldResources_ = value
         End Set
     End Property
 
@@ -58,15 +50,22 @@ Public Class WorkExcel
     ''' Количество строк документа без шапки
     ''' </summary>
     ''' <remarks></remarks>
-    Dim rowCount_ As Excel.Range
-    Public Property RowCount As Excel.Range
-        Get
-            Return rowCount_
-        End Get
-        Set(value As Excel.Range)
-            rowCount_ = value
-        End Set
-    End Property
+    Dim rowCount_ As Long = 0
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private Function RowCount() As Long
+
+        If (rowCount_ = 0) Then
+            rowCount_ = sheet_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown)).Count
+        End If
+
+        Return rowCount_
+
+    End Function
 
     Dim tableObject As Excel.ListObject
 
@@ -119,6 +118,8 @@ Public Class WorkExcel
         sheet_ = wbook_.ActiveSheet
 
         Me.cellFirst_ = sheet_.Range(cellFirst)
+
+
 
     End Sub
 
@@ -216,7 +217,13 @@ Public Class WorkExcel
 
     End Function
 
-    Public Sub HeaderCells(month As String, ceh As String)
+    ''' <summary>
+    ''' Записать значения шапки над таблицей
+    ''' </summary>
+    ''' <param name="month"></param>
+    ''' <param name="ceh"></param>
+    ''' <remarks></remarks>
+    Public Sub WriteHeaderCells(month As String, ceh As String)
         For k = 1 To 5
             App.Range("A" & k).Value = ""
         Next
@@ -229,7 +236,12 @@ Public Class WorkExcel
         sheet_.Range("A4").Value = ceh
     End Sub
 
-    Public Sub ColumnHidden(column As String)
+    ''' <summary>
+    ''' Столбец подразделение, который требуется скрыть при формировании отчета
+    ''' </summary>
+    ''' <param name="column"></param>
+    ''' <remarks></remarks>
+    Public Sub ColumnHiddenCeh(column As String)
         sheet_.Columns(column).Hidden = True
     End Sub
 
@@ -267,7 +279,7 @@ Public Class WorkExcel
     End Sub
 
     ''' <summary>
-    ''' Заполнение заголовка и очистка ячеек перед таблицей
+    ''' Заполнение заголовка, очистка ячеек перед таблицей и в конце таблицы ответственного
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub ClearHeaderCells()
@@ -276,15 +288,25 @@ Public Class WorkExcel
         sheet_.Range("A3").Value = ""
         sheet_.Range("A4").Value = ""
         sheet_.Range("A5").Value = ""
+
+        'Dim Letter = Left(cellFirst_)
+
+        'Dim subStr = cellFirst_.Row
+        Dim subStr_ As Excel.Range = sheet_.Cells(cellFirst_.Row + RowCount() + 2, cellFirst_.Column)
+        subStr_.Value = "Відповідальний:                                               __________          "
+
+        'sheet_.Range("A" & (6 + RowCount() + 2)).Value = "Відповідальний:                                               __________          "
     End Sub
 
     ''' <summary>
-    ''' Авто-ширина столбца ресурс (перенос по словам и определенной ширины)
+    ''' Авто-высота столбца ресурс по содержимому (перенос по словам и определенной ширины)
     ''' </summary>
     ''' <param name="column"></param>
     ''' <remarks></remarks>
-    Public Sub AutoWidthColumnResources(column As String)
-        Dim columnRange As Excel.Range = sheet_.Columns(column) '"C:C"
+    Public Sub AutoHeightColumnResources(column As String)
+        Dim columnString = String.Concat(column, ":", column)
+
+        Dim columnRange As Excel.Range = sheet_.Columns(columnString) '"C:C"
         With columnRange
             .WrapText = True        '    .Orientation = 0
             .AddIndent = False
@@ -292,26 +314,33 @@ Public Class WorkExcel
             .ReadingOrder = Excel.Constants.xlContext
             .MergeCells = False
         End With
+
     End Sub
 
     ''' <summary>
-    ''' Столбец в котором размещен старый шифр и который требуется изменить (по умолчанию = столбец "D6")
+    ''' <para>
+    ''' Столбец в котором размещен старый шифр.
+    ''' </para>
+    ''' 
+    ''' <para>
+    ''' Требуется изменить с текстового типа на числовой
+    ''' </para>
+    ''' 
     ''' </summary>
+    ''' 
     ''' <remarks></remarks>
-    Public Sub RenameColumn(Optional ByVal columnRenameString As String = "D")
+    Public Sub ColumnEditingOldResources(Optional ByVal column As String = "D")
 
-        Me.columnRename_ = sheet_.Range(columnRenameString & cellFirst_.Row)
+        Dim columnString = column & cellFirst_.Row
+
+        Me.columnEditingOldResources_ = sheet_.Range(columnString)
 
         app_.ScreenUpdating = False
 
-        rowCount_ = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
-
-        Dim rCount As Integer = rowCount_.Count
-
         Dim currentCell As Excel.Range
 
-        For i = 1 To rCount
-            currentCell = columnRename_.Offset(i, 0)
+        For i = 1 To RowCount()
+            currentCell = columnEditingOldResources_.Offset(i, 0)
 
             currentCell.Value = Replace(currentCell.Value, ".", "")
 
@@ -327,7 +356,7 @@ Public Class WorkExcel
     ''' Создание объекта таблице в книге Excel (по умолчанию объект таблица = "table1")
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub tableCreateListObject()
+    Public Sub TableCreateListObject()
 
         Dim r1 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
         Dim r2 As Excel.Range = app_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlDown))
@@ -343,15 +372,16 @@ Public Class WorkExcel
     ''' Сортировка столбца происходит по столбцу там, где обозначается старый номенклатурный номер (по умолчанию = столбец №3)
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub sortTable()
+    Public Sub SortTable()
 
-        Dim column = Me.columnRename_.Column
+        Dim column = Me.columnEditingOldResources_.Column
 
         tableObject.Range.Sort( _
         Key1:=tableObject.ListColumns(column).Range, Order1:=Excel.XlSortOrder.xlAscending, _
         Key2:=tableObject.ListColumns(column).Range, Order2:=Excel.XlSortOrder.xlAscending, _
         Orientation:=Excel.XlSortOrientation.xlSortColumns, _
         Header:=Excel.XlYesNoGuess.xlYes)
+
     End Sub
 
     ''' <summary>
@@ -362,15 +392,7 @@ Public Class WorkExcel
 
         app_.ScreenUpdating = False
 
-        cellFirst_.Activate()
-
-        Dim rngCount As Excel.Range
-        rngCount = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
-
-        Dim rCount As Integer
-        rCount = rngCount.Count
-
-        For i = cellFirst_.Row + 1 To rngCount.Count
+        For i = cellFirst_.Row + 1 To RowCount()
             Dim sRow As String = i & ":" & i
             sheet_.Rows(sRow).EntireRow.AutoFit()
         Next
@@ -380,7 +402,11 @@ Public Class WorkExcel
 
     End Sub
 
-    Public Sub tableHeaderColor()
+    ''' <summary>
+    ''' Окраска заголовков таблицы
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub TableHeaderColor()
         Dim r3 As Excel.Range = sheet_.Range(cellFirst_, cellFirst_.End(Excel.XlDirection.xlToRight))
 
         With r3.Interior
@@ -406,22 +432,14 @@ Public Class WorkExcel
 
         app_.ScreenUpdating = False
 
-        cellFirst_.Activate()
-
         cellFirst_.Value = "№ п/п"
-
-        Dim rngCount As Excel.Range = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
-
-        Dim rCount As Integer = rngCount.Count
 
         Dim currentCell As Excel.Range
 
-        For i = 1 To rCount - 1
+        For i = 1 To RowCount() - 1
             currentCell = cellFirst_.Offset(i, 0)
             currentCell.Value = i
         Next
-
-        sheet_.Range("A" & (6 + rCount + 2)).Value = "Відповідальний:                                               __________          "
 
         app_.ScreenUpdating = True
     End Sub
