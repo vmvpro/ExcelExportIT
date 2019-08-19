@@ -252,6 +252,14 @@ Public Class WorkExcel
 
     '--------------------------------------------------------------
 
+    Private Class CellName
+        Public Shared Property Number As String = "number"
+        Public Shared Property Resource As String = "resource"
+        Public Shared Property OldResource As String = "old_resource"
+        Public Shared Property Ceh As String = "ceh"
+
+    End Class
+
     ''' <summary>
     ''' Создание имен столбцам таблицы.
     ''' 
@@ -272,10 +280,10 @@ Public Class WorkExcel
                                    celumnOldResource_ As String,
                                    celumnCeh_ As String)
 
-        sheet_.Range(celumnNumber_ & cellFirst_.Row).Name = "number"
-        sheet_.Range(celumnResource_ & cellFirst_.Row).Name = "resource"
-        sheet_.Range(celumnOldResource_ & cellFirst_.Row).Name = "old_resource"
-        sheet_.Range(celumnCeh_ & cellFirst_.Row).Name = "ceh"
+        sheet_.Range(celumnNumber_ & cellFirst_.Row).Name = CellName.Number ' "number"
+        sheet_.Range(celumnResource_ & cellFirst_.Row).Name = CellName.Resource ' "resource"
+        sheet_.Range(celumnOldResource_ & cellFirst_.Row).Name = CellName.OldResource ' "old_resource"
+        sheet_.Range(celumnCeh_ & cellFirst_.Row).Name = CellName.Ceh ' "ceh"
 
     End Sub
 
