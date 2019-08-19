@@ -1,18 +1,21 @@
-﻿
+﻿Imports System.IO
+
 Public Class SettingsSheetExcel
     Public Shared Sub Run()
         ' Файл находится в папке там где запускается исходник (не в папке bin\)
-        Dim excel_ As New WorkExcel("test_ceh05.xlsx", "A6")
+        Dim filePath As String = Path.Combine(WorkExcel.PathDirectoryLocal, "test_ceh05.xlsx")
+
+        Dim excel_ As New WorkExcel(filePath, "A6")
 
         excel_.Visible(True)
 
-        excel_.CreationCellsByName("A", "C", "D", "E")
+        'excel_.CreationCellsByName("A", "C", "D", "E")
 
         'Заполнение заголовка, очистка ячеек перед таблицей и в конце таблицы ответственного
         excel_.ClearHeaderCells()
 
         ' Настройка ширины колонок
-        excel_.ColumnsWidth()
+        'excel_.ColumnsWidth()
 
         ' Переименовать столбец (Переименование столбца со старым кодом )
         excel_.ColumnEditingOldResources("D")

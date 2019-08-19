@@ -33,6 +33,9 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Dim cellFirst_ As Excel.Range
 
+    Public Property CellFirst As String
+        
+
     ''' <summary>
     ''' Столбец со старым ресурсом
     ''' </summary>
@@ -104,14 +107,14 @@ Public Class WorkExcel
     ''' </para>
     ''' 
     ''' </summary>
-    ''' <param name="fileName">Путь файла там, где запускается программа</param>
+    ''' <param name="filePath">Путь файла там, где запускается программа</param>
     ''' <param name="cellFirst">Начальная ячейка, где находиться таблица</param>
     ''' <remarks></remarks>
-    Public Sub New(fileName As String, cellFirst As String)
+    Public Sub New(filePath As String, cellFirst As String)
 
         'path_ = Environment.CurrentDirectory
         'Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
-        Dim filePath As String = Path.Combine(PathDirectoryLocal, fileName)
+        'Dim filePath As String = Path.Combine(PathDirectoryLocal, fileName)
 
         'Dim pathFile As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
 
@@ -165,13 +168,23 @@ Public Class WorkExcel
         End Get
     End Property
 
-    Sub AutoFilter(ceh As String)
+    ''' <summary>
+    ''' Отфильтровать записи по выбраному складу
+    ''' </summary>
+    ''' <param name="columnLetterCeh">Буква столбца подразделения, для которого нужно отфильтровать по складу</param>
+    ''' <param name="ceh">Склад по которому фильтруется таблица</param>
+    ''' <remarks></remarks>
+    Sub AutoFilter(columnLetterCeh As String, ceh As String)
+
+        'Dim columnCeh As Excel.Range = sheet_.Excel.Range(columnLetterCeh & cellFirst_.Row)
+
+        Dim cellString As String = columnLetterCeh & cellFirst_.Row
+        Dim columnCeh As Excel.Range = sheet_.Range(cellString)
 
         'Dim columnName = tableObjectName & "[[#Headers],[Підрозділи]]"
+        'Dim fieldCeh = sheet_.Range(CellName.Ceh)
 
-        'Dim field = sheet_.Range(columnName)
-
-        sheet_.Range(tableObjectName).AutoFilter(Field:=5, Criteria1:=ceh)
+        sheet_.Range(tableObjectName).AutoFilter(Field:=columnCeh.Column, Criteria1:=ceh)
     End Sub
 
     Public Sub ScreenUpdating(bool As Boolean)
@@ -247,7 +260,10 @@ Public Class WorkExcel
     ''' <param name="column"></param>
     ''' <remarks></remarks>
     Public Sub ColumnHiddenCeh(column As String)
-        sheet_.Columns(column).Hidden = True
+
+        Dim columnString = String.Concat(column, ":", column)
+
+        sheet_.Columns(columnString).Hidden = True
     End Sub
 
     '--------------------------------------------------------------

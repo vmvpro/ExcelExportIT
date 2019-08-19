@@ -88,7 +88,7 @@ Public Class frmMain
 
         Dim pathFile As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
 
-        Dim excel_ As New WorkExcel(pathFile)
+        Dim excel_ As New WorkExcel(pathFile, "A6")
 
         excel_.Visible(True)
 
@@ -96,11 +96,11 @@ Public Class frmMain
 
         'excel_.ScreenUpdating(False)
 
-        excel_.AutoFilter(ceh)
+        excel_.AutoFilter("E", ceh)
 
         excel_.WriteHeaderCells(cboMonth.Text, ceh)
 
-        excel_.ColumnHiddenCeh("E:E")
+        excel_.ColumnHiddenCeh("E")
 
         'excel_.ScreenUpdating(True)
 
@@ -178,7 +178,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btnOpenCurrentDirectory_Click(sender As Object, e As EventArgs) Handles btnOpenCurrentDirectory.Click, btnOpenFiles.Click
-        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryNetwork & "\" & Environment.UserName)
+        System.Diagnostics.Process.Start("explorer", WorkExcel.PathDirectoryApplicationNetwork & "\" & Environment.UserName)
     End Sub
 
     Private Sub btnSettings_Click(sender As Object, e As EventArgs) Handles btnSettings.Click
