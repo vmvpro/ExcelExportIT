@@ -94,7 +94,7 @@ Public Class frmMain
 
         '=============================
 
-        excel_.ScreenUpdating(False)
+        'excel_.ScreenUpdating(False)
 
         excel_.AutoFilter(ceh)
 
@@ -102,7 +102,7 @@ Public Class frmMain
 
         excel_.ColumnHiddenCeh("E:E")
 
-        excel_.ScreenUpdating(True)
+        'excel_.ScreenUpdating(True)
 
         '============================================================
 

@@ -6,7 +6,7 @@ Public Class WorkExcel
     Private app_ As Excel.Application
     Private wbook_ As Excel.Workbook
     Public sheet_ As Excel.Worksheet
-    Private path_ As String
+    'Private path_ As String
 
     Private Const tableObjectName = "table1"
 
@@ -31,29 +31,27 @@ Public Class WorkExcel
     Dim cellFirst_ As Excel.Range
 
     ''' <summary>
-    ''' Перенаименование и сортировка по этому столбцу
+    ''' Столбец со старым ресурсом
     ''' </summary>
     ''' <remarks></remarks>
-    Dim columnEditingOldResources_ As Excel.Range
-    Public Property ColumnRename As Excel.Range
+    Dim columnOldResources_ As Excel.Range
+    Public Property ColumnOldResources As Excel.Range
         Get
-            Return columnEditingOldResources_
+            Return columnOldResources_
         End Get
         Set(value As Excel.Range)
-            columnEditingOldResources_ = value
+            columnOldResources_ = value
         End Set
     End Property
 
-
-
     ''' <summary>
-    ''' Количество строк документа без шапки
+    ''' Количество строк документа c шапкой
     ''' </summary>
     ''' <remarks></remarks>
     Dim rowCount_ As Long = 0
 
     ''' <summary>
-    ''' 
+    ''' Количество строк документа c шапкой
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
@@ -69,15 +67,21 @@ Public Class WorkExcel
 
     Dim tableObject As Excel.ListObject
 
+    Public Shared ReadOnly Property PathDirectoryApplicationNetwork As String
+        Get
+            Return "\\erpdb\TEMP\OSV"
+        End Get
+    End Property
+
     Public Shared ReadOnly Property PathDirectoryNetwork As String
         Get
-            Return "\\erpdb\TEMP\OSV\Files"
+            Return PathDirectoryApplicationNetwork & "\Files"
         End Get
     End Property
 
     Public Shared ReadOnly Property PathDirectoryLocal As String
         Get
-            Dim path_s As String = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\..\Files"))
+            Dim path_s As String = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\..\"))
             Return path_s
         End Get
     End Property
@@ -102,9 +106,11 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub New(fileName As String, cellFirst As String)
 
-        path_ = Environment.CurrentDirectory
+        'path_ = Environment.CurrentDirectory
         'Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
-        Dim path_s As String = Path.GetFullPath(Path.Combine(path_, "..\..\" & fileName))
+        Dim filePath As String = Path.Combine(PathDirectoryLocal, fileName)
+
+        'Dim pathFile As String = Path.Combine(WorkExcel.PathDirectoryNetwork, monthOSV & ".xlsx")
 
         Try
             app_ = GetObject(, "Excel.Application")
@@ -114,32 +120,12 @@ Public Class WorkExcel
 
         If app_.ScreenUpdating = False Then app_.ScreenUpdating = True
 
-        wbook_ = app_.Workbooks.Add(path_s)
+        wbook_ = app_.Workbooks.Add(filePath)
         sheet_ = wbook_.ActiveSheet
 
         Me.cellFirst_ = sheet_.Range(cellFirst)
 
-
-
     End Sub
-
-    Private ReadOnly Property App As Excel.Application
-        Get
-            Return app_
-        End Get
-    End Property
-
-    Private ReadOnly Property WorkBook As Excel.Workbook
-        Get
-            Return wbook_
-        End Get
-    End Property
-
-    Private ReadOnly Property ActiveSheet As Excel.Worksheet
-        Get
-            Return sheet_
-        End Get
-    End Property
 
     Public Sub New(pathFile As String)
 
@@ -159,6 +145,22 @@ Public Class WorkExcel
         sheet_ = wbook_.ActiveSheet
 
     End Sub
+
+    Private ReadOnly Property App As Excel.Application
+        Get
+            Return app_
+        End Get
+    End Property
+    Private ReadOnly Property WorkBook As Excel.Workbook
+        Get
+            Return wbook_
+        End Get
+    End Property
+    Private ReadOnly Property ActiveSheet As Excel.Worksheet
+        Get
+            Return sheet_
+        End Get
+    End Property
 
     Sub AutoFilter(ceh As String)
 
@@ -196,7 +198,7 @@ Public Class WorkExcel
 
     Private Function DirectoryExcel() As String
 
-        Dim directoryExcel_ As New DirectoryInfo(Path.Combine(PathDirectoryNetwork, Environment.UserName, "Excel"))
+        Dim directoryExcel_ As New DirectoryInfo(Path.Combine(PathDirectoryApplicationNetwork, Environment.UserName, "Excel"))
         directoryExcel_.Create()
 
         Return directoryExcel_.FullName
@@ -210,7 +212,7 @@ Public Class WorkExcel
 
     Private Function DirectoryPdf() As String
 
-        Dim directoryPdf_ As New DirectoryInfo(Path.Combine(PathDirectoryNetwork, Environment.UserName, "Pdf"))
+        Dim directoryPdf_ As New DirectoryInfo(Path.Combine(PathDirectoryApplicationNetwork, Environment.UserName, "Pdf"))
         directoryPdf_.Create()
 
         Return directoryPdf_.FullName
@@ -244,6 +246,10 @@ Public Class WorkExcel
     Public Sub ColumnHiddenCeh(column As String)
         sheet_.Columns(column).Hidden = True
     End Sub
+
+    '--------------------------------------------------------------
+
+
 
 
     ''' <summary>
@@ -293,13 +299,13 @@ Public Class WorkExcel
 
         'Dim subStr = cellFirst_.Row
         Dim subStr_ As Excel.Range = sheet_.Cells(cellFirst_.Row + RowCount() + 2, cellFirst_.Column)
-        subStr_.Value = "Відповідальний:                                               __________          "
+        subStr_.Value = "Відповідальний:        __________________________________________________"
 
         'sheet_.Range("A" & (6 + RowCount() + 2)).Value = "Відповідальний:                                               __________          "
     End Sub
 
     ''' <summary>
-    ''' Авто-высота столбца ресурс по содержимому (перенос по словам и определенной ширины)
+    ''' Настройки формата столбца (перенос по словам и определенной ширины)
     ''' </summary>
     ''' <param name="column"></param>
     ''' <remarks></remarks>
@@ -333,14 +339,14 @@ Public Class WorkExcel
 
         Dim columnString = column & cellFirst_.Row
 
-        Me.columnEditingOldResources_ = sheet_.Range(columnString)
+        Me.columnOldResources_ = sheet_.Range(columnString)
 
         app_.ScreenUpdating = False
 
         Dim currentCell As Excel.Range
 
         For i = 1 To RowCount()
-            currentCell = columnEditingOldResources_.Offset(i, 0)
+            currentCell = columnOldResources_.Offset(i, 0)
 
             currentCell.Value = Replace(currentCell.Value, ".", "")
 
@@ -374,7 +380,7 @@ Public Class WorkExcel
     ''' <remarks></remarks>
     Public Sub SortTable()
 
-        Dim column = Me.columnEditingOldResources_.Column
+        Dim column = Me.columnOldResources_.Column
 
         tableObject.Range.Sort( _
         Key1:=tableObject.ListColumns(column).Range, Order1:=Excel.XlSortOrder.xlAscending, _

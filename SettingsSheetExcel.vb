@@ -6,7 +6,8 @@ Public Class SettingsSheetExcel
 
         excel_.Visible(True)
 
-        'excel_.CellFirst = "A6"
+        'Заполнение заголовка, очистка ячеек перед таблицей и в конце таблицы ответственного
+        excel_.ClearHeaderCells()
 
         ' Настройка ширины колонок
         excel_.ColumnsWidth()
@@ -32,7 +33,7 @@ Public Class SettingsSheetExcel
         ' Настроить колонки листа
         excel_.ColumnsWidth()
 
-        ' Авто-высота столбца ресурс по содержимому (перенос по словам и определенной ширины)
+        ' Настройки формата столбца (перенос по словам и определенной ширины)
         excel_.AutoHeightColumnResources("C")
 
         ' Настройка страницы печати (А3, отступы, масштаб = 95%)
