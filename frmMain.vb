@@ -183,51 +183,17 @@ Public Class frmMain
 
     Private Sub btnSettings_Click(sender As Object, e As EventArgs) Handles btnSettings.Click
 
-        ' Файл находится в папке там где запускается исходник (не в папке bin\)
-        Dim excel_ As New WorkExcel("2019_Июль_Origin.xlsx", "A6")
-
-        excel_.Visible(True)
-
-        ' Переименовать столбец (Переименование столбца со старым кодом )
-        excel_.RenameRange("D")
-
-        ' Загловок таблицы сделать цветным
-        excel_.tableHeaderColor()
-
-        ' Создание в книге объекта таблица
-        excel_.tableCreateListObject()
-
-        ' Сортировка столбца в таблице (старый шифр)
-        excel_.sortTable()
-
-        ' Выравнивание строк по содержимому
-        excel_.EntireRowAutoFit()
-
-        ' Создание нумереции строк
-        excel_.CreateCounterRow()
-
-        ' Настроить колонки листа
-        excel_.ColumnsWidth()
-
-        ' Настройка страницы печати (А3, отступы, масштаб = 95%)
-        excel_.PageSettings()
-
-        ' Порядковый номер оборотки после этого зделать
-        'Dim cell_ As Range
-        'Dim currentCell As Range
-
-        'cell_ = Range("A5")
-
-        'For i = 1 To 65520
-        '    currentCell = cell_.Offset(i, 0)
-        '    currentCell.Value = i
-
-        'Next
+        
+        SettingsSheetExcel.Run()
+        
 
         ' ВНИМАНИЕ!!!
         ' Не забыть пересохранить файл Ексель, 
         ' так как файл Excel после сортировки таким образом меняет структуру
         ' после которой невозможно открыть файл программным образом
+        '
+        ' Т.е. файл  сначала закрыть, потом открыть на все всплывающие окна ответить 
+        ' положительно и пересохранить с тем же именем
 
     End Sub
 

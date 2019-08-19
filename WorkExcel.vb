@@ -239,11 +239,7 @@ Public Class WorkExcel
     ''' Настройка листа.
     ''' 
     ''' <para>
-    ''' 1. Настройка ширины колонок
-    ''' </para>
-    ''' 
-    ''' <para>
-    ''' 2. Настройка столбца 'Наименование' - перенос по словам и определенной ширины
+    ''' Настройка ширины колонок
     ''' </para>
     ''' 
     ''' </summary>
@@ -270,6 +266,10 @@ Public Class WorkExcel
 
     End Sub
 
+    ''' <summary>
+    ''' Заполнение заголовка и очистка ячеек перед таблицей
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub ClearHeaderCells()
         sheet_.Range("A1").Value = "Оборотно-сальдова відомість"
         sheet_.Range("A2").Value = ""
@@ -278,7 +278,11 @@ Public Class WorkExcel
         sheet_.Range("A5").Value = ""
     End Sub
 
-
+    ''' <summary>
+    ''' Авто-ширина столбца ресурс (перенос по словам и определенной ширины)
+    ''' </summary>
+    ''' <param name="column"></param>
+    ''' <remarks></remarks>
     Public Sub AutoWidthColumnResources(column As String)
         Dim columnRange As Excel.Range = sheet_.Columns(column) '"C:C"
         With columnRange
@@ -294,7 +298,7 @@ Public Class WorkExcel
     ''' Столбец в котором размещен старый шифр и который требуется изменить (по умолчанию = столбец "D6")
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub RenameRange(Optional ByVal columnRenameString As String = "D")
+    Public Sub RenameColumn(Optional ByVal columnRenameString As String = "D")
 
         Me.columnRename_ = sheet_.Range(columnRenameString & cellFirst_.Row)
 
@@ -302,8 +306,7 @@ Public Class WorkExcel
 
         rowCount_ = app_.Range(app_.Selection, app_.Selection.End(Excel.XlDirection.xlDown))
 
-        Dim rCount As Integer
-        rCount = rowCount_.Count
+        Dim rCount As Integer = rowCount_.Count
 
         Dim currentCell As Excel.Range
 
