@@ -2,6 +2,9 @@
 Imports System.IO
 Imports System.Text
 
+
+
+
 Public Class WorkExcel
     Private app_ As Excel.Application
     Private wbook_ As Excel.Workbook
@@ -249,7 +252,32 @@ Public Class WorkExcel
 
     '--------------------------------------------------------------
 
+    ''' <summary>
+    ''' Создание имен столбцам таблицы.
+    ''' 
+    ''' <para>
+    ''' <example>
+    ''' Пример: CreationCellsByName("A", "C", "D", "E")
+    ''' </example>
+    ''' </para>
+    ''' </summary>
+    ''' <param name="celumnNumber_">Буква для столбца, где будет - Номер</param>
+    ''' <param name="celumnResource_">Буква для столбца, где будет - Ресурс</param>
+    ''' <param name="celumnOldResource_">Буква для столбца, где будет - Старый ресурс</param>
+    ''' <param name="celumnCeh_">Буква для столбца, где будет Склад</param>
+    ''' 
+    ''' <remarks></remarks>
+    Public Sub CreationCellsByName(celumnNumber_ As String,
+                                   celumnResource_ As String,
+                                   celumnOldResource_ As String,
+                                   celumnCeh_ As String)
 
+        sheet_.Range(celumnNumber_ & cellFirst_.Row).Name = "number"
+        sheet_.Range(celumnResource_ & cellFirst_.Row).Name = "resource"
+        sheet_.Range(celumnOldResource_ & cellFirst_.Row).Name = "old_resource"
+        sheet_.Range(celumnCeh_ & cellFirst_.Row).Name = "ceh"
+
+    End Sub
 
 
     ''' <summary>

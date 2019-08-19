@@ -6,6 +6,8 @@ Public Class SettingsSheetExcel
 
         excel_.Visible(True)
 
+        excel_.CreationCellsByName("A", "C", "D", "E")
+
         'Заполнение заголовка, очистка ячеек перед таблицей и в конце таблицы ответственного
         excel_.ClearHeaderCells()
 
