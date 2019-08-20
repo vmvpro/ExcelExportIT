@@ -357,7 +357,7 @@ Public Class WorkExcel
     End Sub
 
     ''' <summary>
-    ''' Настройки формата столбца (перенос по словам и определенной ширины)
+    ''' Авто-высота по содержимому (перенос по словам и определенной ширины)
     ''' </summary>
     ''' <param name="column"></param>
     ''' <remarks></remarks>
@@ -452,7 +452,7 @@ Public Class WorkExcel
 
         For i = cellFirst_.Row + 1 To RowCount()
             Dim sRow As String = i & ":" & i
-            sheet_.Rows(sRow).EntireRow.AutoFit()
+            'sheet_.Rows(sRow).EntireRow.AutoFit()
         Next
 
         app_.ScreenUpdating = True

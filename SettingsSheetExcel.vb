@@ -3,7 +3,10 @@
 Public Class SettingsSheetExcel
     Public Shared Sub Run()
         ' Файл находится в папке там где запускается исходник (не в папке bin\)
-        Dim filePath As String = Path.Combine(WorkExcel.PathDirectoryLocal, "test_ceh05.xlsx")
+
+        Dim fileName = "2019_Липень.xlsx"
+
+        Dim filePath As String = Path.Combine(WorkExcel.PathDirectoryLocal, fileName)
 
         Dim excel_ As New WorkExcel(filePath, "A6")
 
@@ -38,7 +41,7 @@ Public Class SettingsSheetExcel
         ' Настроить колонки листа
         excel_.ColumnsWidth()
 
-        ' Настройки формата столбца (перенос по словам и определенной ширины)
+        ' Авто-высота по содержимому (перенос по словам и определенной ширины)
         excel_.AutoHeightColumnResources("C")
 
         ' Настройка страницы печати (А3, отступы, масштаб = 95%)
